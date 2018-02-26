@@ -1,0 +1,6 @@
+/target/
+logging.out
+src/main/resources/dataSource.properties
+src/main/resources/dataSourceAll.properties
+target/classes/dataSource.properties
+target/classes/dataSourceAll.properties
