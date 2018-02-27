@@ -1,9 +1,19 @@
 package com.factory.domain;
 
 public class About {
+	private int id;
 	private String test;
-	private int number;
+	private Integer number;
+	private Boolean bool;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getTest() {
 		return test;
 	}
@@ -12,12 +22,20 @@ public class About {
 		this.test = test;
 	}
 
-	public int getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(Integer number) {
 		this.number = number;
+	}
+
+	public Boolean getBool() {
+		return bool;
+	}
+
+	public void setBool(Boolean bool) {
+		this.bool = bool;
 	}
 
 }

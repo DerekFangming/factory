@@ -10,8 +10,10 @@ import com.factory.utils.Pair;
 
 public interface AboutDao extends CommonDao<About>{
 	enum Field implements DaoFieldEnum{
+		ID(true),
 		TEST,
-		NUMBER;
+		NUMBER,
+		BOOL;
 
 		public boolean isPK = false;
 		public String name;
@@ -37,8 +39,10 @@ public interface AboutDao extends CommonDao<About>{
 	}
 
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
+		new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
 		new Pair<Enum<?>, String>(Field.TEST, "TEXT"),
-		new Pair<Enum<?>, String>(Field.NUMBER, "INTEGER"));
+		new Pair<Enum<?>, String>(Field.NUMBER, "INTEGER"),
+		new Pair<Enum<?>, String>(Field.BOOL, "BOOLEAN"));
 
 }
 

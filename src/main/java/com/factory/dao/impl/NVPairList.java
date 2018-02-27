@@ -14,14 +14,6 @@ public class NVPairList {
 		this.pairList.add(new NVPair(name, value));
 	}
 
-	public void addNullableNumValue(String name, Object value) {
-		if((int)value == -1){
-			this.pairList.add(new NVPair(name, null));
-		}else{
-			this.pairList.add(new NVPair(name, value));
-		}
-	}
-	
 	public void addValueNotNull(String paramName, Object value) throws IllegalArgumentException {
 		if (value != null) {
 			this.addValue(paramName, value);

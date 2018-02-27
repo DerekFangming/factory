@@ -23,7 +23,8 @@ public class JdbcAboutDao extends JdbcBaseDao<About> implements AboutDao{
 		NVPairList params = new NVPairList();
 
 		params.addValue(AboutDao.Field.TEST.name, obj.getTest());
-		params.addNullableNumValue(AboutDao.Field.NUMBER.name, obj.getNumber());
+		params.addValue(AboutDao.Field.NUMBER.name, obj.getNumber());
+		params.addValue(AboutDao.Field.BOOL.name, obj.getBool());
 
 		return params;
 	}
@@ -35,8 +36,10 @@ public class JdbcAboutDao extends JdbcBaseDao<About> implements AboutDao{
 			public About mapRow(ResultSet rs, int row) throws SQLException {
 				About obj = new About();
 
+				obj.setId(rs.getInt(AboutDao.Field.ID.name));
 				obj.setTest(rs.getString(AboutDao.Field.TEST.name));
-				obj.setNumber(rs.getInt(AboutDao.Field.NUMBER.name));
+				obj.setNumber((Integer)rs.getObject(AboutDao.Field.NUMBER.name));
+				obj.setBool((Boolean)rs.getObject(AboutDao.Field.BOOL.name));
 
 				return obj;
 			}
