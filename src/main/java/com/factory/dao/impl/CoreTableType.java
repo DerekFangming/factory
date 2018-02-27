@@ -3,6 +3,7 @@ package com.factory.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.factory.dao.AboutDao;
 import com.factory.dao.DataSourceRegistry;
 
 import com.factory.dao.SchemaTable;
@@ -14,7 +15,7 @@ import com.factory.utils.Pair;
 
 public enum CoreTableType implements SchemaTable
 {
-	
+	ABOUT(SdkDataSourceType.CORE, AboutDao.FieldTypes)
 	;
 
 

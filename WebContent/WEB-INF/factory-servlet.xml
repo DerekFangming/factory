@@ -39,7 +39,7 @@
     <property name="url" value="jdbc:postgresql://${serverCore}/${coreDb}" />
     <property name="username" value="${coreDbUsername}" />
     <property name="password" value="${coreDbPassword}" />
-    <property name="dbNickname" value="WC_SERVICE" />
+    <property name="dbNickname" value="CORE" />
   </bean>
 
   <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -62,10 +62,6 @@
     <property name="redirectHttp10Compatible" value="false" />
   </bean>
 
-  <mvc:resources mapping="/favicon.ico" location="/WEB-INF/favicon.ico" />
-  <mvc:resources mapping="/apple-app-site-association" location="/WEB-INF/apple-app-site-association" />
-  <mvc:resources mapping="/resources/**" location="/WEB-INF/view/" />
-  <mvc:resources mapping="/images/**" location="file:/Volumes/Data/${imgDir}/" cache-period="31556926" />
 
   <mvc:annotation-driven />
 
