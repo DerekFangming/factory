@@ -18,7 +18,7 @@ create table users (
 	salt text not null,
 	created_at timestamp without time zone NOT NULL,
 	role_id integer not null,
-	company_id integer not null,
+	company_id integer not null REFERENCES companies,
 	registration_code integer,
 	updated_by integer,
 	name text not null,
@@ -30,6 +30,37 @@ create table users (
 
 create table roles (
 	id serial primary key,
-	company_id integer not null,
+	company_id integer not null REFERENCES companies,
+	name text not null,
+	level integer not null,
+	created_at timestamp without time zone NOT NULL,
+	owner_id integer not null REFERENCES users,
+	updated_by integer REFERENCES users
+);
+
+create table products (
+	id serial primary key,
+	company_id integer not null REFERENCES companies,
+	model text not null,
+	name text not null,
+	description text not null
+	net_cost decimal,
+	market_price decimal,
+	labor_cost decimal,
 	
+	created_at timestamp without time zone NOT NULL,
+	owner_id integer not null REFERENCES users,
+	updated_by integer REFERENCES users
+);
+
+create table tasks (
+	id serial primary key,
+	company_id integer not null REFERENCES companies,
+	title text not null,
+	type text not null,
+	description text,
+	
+	created_at timestamp without time zone NOT NULL,
+	owner_id integer not null REFERENCES users,
+	updated_by integer REFERENCES users
 );
