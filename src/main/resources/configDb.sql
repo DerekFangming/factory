@@ -17,7 +17,7 @@ create table users (
 	confirmed boolean not null default false,
 	salt text not null,
 	created_at timestamp without time zone NOT NULL,
-	role_id integer not null,
+	role_level integer not null,
 	company_id integer not null REFERENCES companies,
 	registration_code integer,
 	updated_by integer,
@@ -46,6 +46,7 @@ create table products (
 	description text not null
 	net_cost decimal,
 	market_price decimal,
+	price_visible_role_level integer,
 	labor_cost decimal,
 	
 	created_at timestamp without time zone NOT NULL,
@@ -59,6 +60,9 @@ create table tasks (
 	title text not null,
 	type text not null,
 	description text,
+	status text not null,
+	visible_role_level integer,
+	product_id REFERENCES products
 	
 	created_at timestamp without time zone NOT NULL,
 	owner_id integer not null REFERENCES users,
