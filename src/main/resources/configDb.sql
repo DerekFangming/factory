@@ -62,9 +62,26 @@ create table tasks (
 	description text,
 	status text not null,
 	visible_role_level integer,
-	product_id REFERENCES products
+	
+	product_id integer REFERENCES products,
+	count integer,
 	
 	created_at timestamp without time zone NOT NULL,
 	owner_id integer not null REFERENCES users,
-	updated_by integer REFERENCES users
+	updated_by integer REFERENCES users,
+	
+	assignee integer,
+	assigned_to_group boolean
+);
+
+create table task_assignee_groups (
+	id serial primary key,
+	task_id integer REFERENCES tasks
+	assignee_id integer not null REFERENCES users,
+	created_at timestamp without time zone NOT NULL,
+	owner_id integer not null REFERENCES users
+);
+
+create table images (
+
 );
