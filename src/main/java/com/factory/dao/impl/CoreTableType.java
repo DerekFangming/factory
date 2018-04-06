@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.factory.dao.AboutDao;
+import com.factory.dao.CompanyDao;
 import com.factory.dao.DataSourceRegistry;
-
 import com.factory.dao.SchemaTable;
 import com.factory.dao.SdkDataSource;
 import com.factory.dao.SdkDataSourceType;
-
 import com.factory.utils.Pair;
 
 
 public enum CoreTableType implements SchemaTable
 {
-	ABOUT(SdkDataSourceType.CORE, AboutDao.FieldTypes)
+	ABOUT(SdkDataSourceType.CORE, AboutDao.FieldTypes),
+	COMPANIES(SdkDataSourceType.CORE, CompanyDao.FieldTypes)
 	;
 
 
