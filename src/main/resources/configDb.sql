@@ -19,6 +19,13 @@ create table roles (
 	updated_by integer
 );
 
+create table images (
+	id serial primary key,
+	company_id integer not null REFERENCES companies,
+	created_at timestamp without time zone NOT NULL,
+	owner_id integer not null
+);
+
 create table users (
 	id serial primary key,
 	username text not null,
@@ -28,10 +35,13 @@ create table users (
 	confirmed boolean not null default false,
 	salt text not null,
 	created_at timestamp without time zone NOT NULL,
+	updated_by integer,
 	role_id integer not null REFERENCES roles,
+	manager_id integer,
 	company_id integer not null REFERENCES companies,
 	registration_code integer,
-	updated_by integer,
+	verification_needed boolean,
+	activated boolean,
 	name text not null,
 	phone text,
 	work_id text,
@@ -101,6 +111,4 @@ create table task_results (
 	
 );
 
-create table images (
 
-);
