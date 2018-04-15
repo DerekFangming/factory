@@ -49,6 +49,13 @@ create table users (
 	joined_date timestamp without time zone
 );
 
+create table user_activations (
+	id serial primary key,
+	requester_id integer not null REFERENCES users,
+	responder_id integer not null REFERENCES users,
+	created_at timestamp without time zone NOT NULL
+);
+
 create table products (
 	id serial primary key,
 	company_id integer not null REFERENCES companies,
@@ -77,13 +84,7 @@ create table product_combinations (
 	updated_by integer REFERENCES users
 );
 
-create table task_assignee_groups (
-	id serial primary key,
-	task_id integer REFERENCES tasks
-	assignee_id integer not null REFERENCES users,
-	created_at timestamp without time zone NOT NULL,
-	owner_id integer not null REFERENCES users
-);
+-- Not deployed yet 
 
 create table tasks (
 	id serial primary key,
@@ -105,6 +106,14 @@ create table tasks (
 	owner_id integer not null REFERENCES users,
 	updated_by integer REFERENCES users,
 	
+);
+
+create table task_assignee_groups (
+	id serial primary key,
+	task_id integer REFERENCES tasks,
+	assignee_id integer not null REFERENCES users,
+	created_at timestamp without time zone NOT NULL,
+	owner_id integer not null REFERENCES users
 );
 
 create table task_results (

@@ -5,15 +5,15 @@ import java.util.List;
 
 import com.factory.dao.impl.QueryTerm;
 import com.factory.dao.impl.RelationalOpType;
-import com.factory.domain.About;
+import com.factory.domain.Image;
 import com.factory.utils.Pair;
 
-public interface AboutDao extends CommonDao<About>{
+public interface ImageDao extends CommonDao<Image>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
-		TEST,
-		NUMBER,
-		BOOL;
+		COMPANY_ID,
+		CREATED_AT,
+		OWNER_ID;
 
 		public boolean isPK = false;
 		public String name;
@@ -40,9 +40,8 @@ public interface AboutDao extends CommonDao<About>{
 
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
-		new Pair<Enum<?>, String>(Field.TEST, "TEXT"),
-		new Pair<Enum<?>, String>(Field.NUMBER, "INTEGER"),
-		new Pair<Enum<?>, String>(Field.BOOL, "BOOLEAN"));
+		new Pair<Enum<?>, String>(Field.COMPANY_ID, "INTEGER NOT NULL"),
+		new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE NOT NULL"),
+		new Pair<Enum<?>, String>(Field.OWNER_ID, "INTEGER NOT NULL"));
 
 }
-

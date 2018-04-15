@@ -13,13 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.factory.dao.AboutDao;
-import com.factory.domain.About;
 
 @Controller
 public class AboutController {
 	
-	@Autowired private AboutDao aboutDao;
 	
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> about(HttpServletRequest request, HttpServletResponse response) {
@@ -32,13 +29,6 @@ public class AboutController {
 	}
 	
 	private void testColumns() {
-		About about = aboutDao.findObject(AboutDao.Field.TEST.getQueryTerm("works"));
-		System.out.println(about.getNumber());
-		System.out.println(about.getBool());
-		
-		about = aboutDao.findObject(AboutDao.Field.TEST.getQueryTerm("val"));
-		System.out.println(about.getNumber());
-		System.out.println(about.getBool());
 		/*
 		about.setTest("test");
 		aboutDao.persist(about);
