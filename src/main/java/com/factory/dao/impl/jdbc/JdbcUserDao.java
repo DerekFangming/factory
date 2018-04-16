@@ -41,6 +41,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 		params.addValue(UserDao.Field.NAME.name, obj.getName());
 		params.addValue(UserDao.Field.PHONE.name, obj.getPhone());
 		params.addValue(UserDao.Field.WORK_ID.name, obj.getWorkId());
+		params.addValue(UserDao.Field.AVATAR_ID.name, obj.getAvatarId());
 		params.addValue(UserDao.Field.BIRTHDAY.name, Utils.parseDate(obj.getBirthday()));
 		params.addValue(UserDao.Field.JOINED_DATE.name, Utils.parseDate(obj.getJoinedDate()));
 
@@ -72,6 +73,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 				obj.setName(rs.getString(UserDao.Field.NAME.name));
 				obj.setPhone(rs.getString(UserDao.Field.PHONE.name));
 				obj.setWorkId(rs.getString(UserDao.Field.WORK_ID.name));
+				obj.setAvatarId((Integer)rs.getObject(UserDao.Field.AVATAR_ID.name));
 				obj.setBirthday(Utils.parseTimestamp(rs.getTimestamp(UserDao.Field.BIRTHDAY.name)));
 				obj.setJoinedDate(Utils.parseTimestamp(rs.getTimestamp(UserDao.Field.JOINED_DATE.name)));
 

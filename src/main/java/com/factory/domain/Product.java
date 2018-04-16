@@ -8,12 +8,14 @@ public class Product {
 	private String model;
 	private String name;
 	private String description;
+	private Integer imageId;
 	private Boolean combinedProduct;
-	private Double netCost;
-	private Double marketPrice;
-	private Integer priceVisibleRoleId;
 	private Double laborCost;
 	private Integer visibleRoleId;
+	private Double sensitiveNetCost;
+	private Double sensitiveMarketPrice;
+	private String sensitiveDescription;
+	private Integer sensitiveVisibleRoleId;
 	private Instant createdAt;
 	private Integer ownerId;
 	private Integer updatedBy;
@@ -58,36 +60,20 @@ public class Product {
 		this.description = description;
 	}
 
+	public Integer getImageId() {
+		return imageId;
+	}
+
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+
 	public Boolean getCombinedProduct() {
 		return combinedProduct;
 	}
 
 	public void setCombinedProduct(Boolean combinedProduct) {
 		this.combinedProduct = combinedProduct;
-	}
-
-	public Double getNetCost() {
-		return netCost;
-	}
-
-	public void setNetCost(Double netCost) {
-		this.netCost = netCost;
-	}
-
-	public Double getMarketPrice() {
-		return marketPrice;
-	}
-
-	public void setMarketPrice(Double marketPrice) {
-		this.marketPrice = marketPrice;
-	}
-
-	public Integer getPriceVisibleRoleId() {
-		return priceVisibleRoleId;
-	}
-
-	public void setPriceVisibleRoleId(Integer priceVisibleRoleId) {
-		this.priceVisibleRoleId = priceVisibleRoleId;
 	}
 
 	public Double getLaborCost() {
@@ -104,6 +90,38 @@ public class Product {
 
 	public void setVisibleRoleId(Integer visibleRoleId) {
 		this.visibleRoleId = visibleRoleId;
+	}
+
+	public Double getSensitiveNetCost() {
+		return sensitiveNetCost;
+	}
+
+	public void setSensitiveNetCost(Double sensitiveNetCost) {
+		this.sensitiveNetCost = sensitiveNetCost;
+	}
+
+	public Double getSensitiveMarketPrice() {
+		return sensitiveMarketPrice;
+	}
+
+	public void setSensitiveMarketPrice(Double sensitiveMarketPrice) {
+		this.sensitiveMarketPrice = sensitiveMarketPrice;
+	}
+
+	public String getSensitiveDescription() {
+		return sensitiveDescription;
+	}
+
+	public void setSensitiveDescription(String sensitiveDescription) {
+		this.sensitiveDescription = sensitiveDescription;
+	}
+
+	public Integer getSensitiveVisibleRoleId() {
+		return sensitiveVisibleRoleId;
+	}
+
+	public void setSensitiveVisibleRoleId(Integer sensitiveVisibleRoleId) {
+		this.sensitiveVisibleRoleId = sensitiveVisibleRoleId;
 	}
 
 	public Instant getCreatedAt() {

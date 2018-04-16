@@ -21,6 +21,7 @@ public class User {
 	private String name;
 	private String phone;
 	private String workId;
+	private Integer avatarId;
 	private Instant birthday;
 	private Instant joinedDate;
 
@@ -166,6 +167,14 @@ public class User {
 
 	public void setWorkId(String workId) {
 		this.workId = workId;
+	}
+
+	public Integer getAvatarId() {
+		return avatarId;
+	}
+
+	public void setAvatarId(Integer avatarId) {
+		this.avatarId = avatarId;
 	}
 
 	public Instant getBirthday() {

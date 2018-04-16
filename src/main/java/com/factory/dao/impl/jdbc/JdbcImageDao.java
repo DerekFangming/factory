@@ -24,6 +24,9 @@ public class JdbcImageDao extends JdbcBaseDao<Image> implements ImageDao{
 		NVPairList params = new NVPairList();
 
 		params.addValue(ImageDao.Field.COMPANY_ID.name, obj.getCompanyId());
+		params.addValue(ImageDao.Field.TYPE.name, obj.getType());
+		params.addValue(ImageDao.Field.MAPPING_ID.name, obj.getMappingId());
+		params.addValue(ImageDao.Field.POSITION.name, obj.getPosition());
 		params.addValue(ImageDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 		params.addValue(ImageDao.Field.OWNER_ID.name, obj.getOwnerId());
 
@@ -39,6 +42,9 @@ public class JdbcImageDao extends JdbcBaseDao<Image> implements ImageDao{
 
 				obj.setId(rs.getInt(ImageDao.Field.ID.name));
 				obj.setCompanyId((Integer)rs.getObject(ImageDao.Field.COMPANY_ID.name));
+				obj.setType(rs.getString(ImageDao.Field.TYPE.name));
+				obj.setMappingId((Integer)rs.getObject(ImageDao.Field.MAPPING_ID.name));
+				obj.setPosition((Integer)rs.getObject(ImageDao.Field.POSITION.name));
 				obj.setCreatedAt(rs.getTimestamp(ImageDao.Field.CREATED_AT.name).toInstant());
 				obj.setOwnerId((Integer)rs.getObject(ImageDao.Field.OWNER_ID.name));
 

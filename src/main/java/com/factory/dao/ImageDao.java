@@ -12,6 +12,9 @@ public interface ImageDao extends CommonDao<Image>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
 		COMPANY_ID,
+		TYPE,
+		MAPPING_ID,
+		POSITION,
 		CREATED_AT,
 		OWNER_ID;
 
@@ -41,6 +44,9 @@ public interface ImageDao extends CommonDao<Image>{
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
 		new Pair<Enum<?>, String>(Field.COMPANY_ID, "INTEGER NOT NULL"),
+		new Pair<Enum<?>, String>(Field.TYPE, "TEXT"),
+		new Pair<Enum<?>, String>(Field.MAPPING_ID, "INTEGER"),
+		new Pair<Enum<?>, String>(Field.POSITION, "INTEGER"),
 		new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE NOT NULL"),
 		new Pair<Enum<?>, String>(Field.OWNER_ID, "INTEGER NOT NULL"));
 

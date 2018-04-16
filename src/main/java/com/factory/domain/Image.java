@@ -5,6 +5,9 @@ import java.time.Instant;
 public class Image {
 	private int id;
 	private Integer companyId;
+	private String type;
+	private Integer mappingId;
+	private Integer position;
 	private Instant createdAt;
 	private Integer ownerId;
 
@@ -22,6 +25,30 @@ public class Image {
 
 	public void setCompanyId(Integer companyId) {
 		this.companyId = companyId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Integer getMappingId() {
+		return mappingId;
+	}
+
+	public void setMappingId(Integer mappingId) {
+		this.mappingId = mappingId;
+	}
+
+	public Integer getPosition() {
+		return position;
+	}
+
+	public void setPosition(Integer position) {
+		this.position = position;
 	}
 
 	public Instant getCreatedAt() {

@@ -28,6 +28,7 @@ public interface UserDao extends CommonDao<User>{
 		NAME,
 		PHONE,
 		WORK_ID,
+		AVATAR_ID,
 		BIRTHDAY,
 		JOINED_DATE;
 
@@ -73,6 +74,7 @@ public interface UserDao extends CommonDao<User>{
 		new Pair<Enum<?>, String>(Field.NAME, "TEXT NOT NULL"),
 		new Pair<Enum<?>, String>(Field.PHONE, "TEXT"),
 		new Pair<Enum<?>, String>(Field.WORK_ID, "TEXT"),
+		new Pair<Enum<?>, String>(Field.AVATAR_ID, "INTEGER"),
 		new Pair<Enum<?>, String>(Field.BIRTHDAY, "TIMESTAMP WITHOUT TIME ZONE"),
 		new Pair<Enum<?>, String>(Field.JOINED_DATE, "TIMESTAMP WITHOUT TIME ZONE"));
 

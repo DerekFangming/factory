@@ -16,12 +16,17 @@ create table roles (
 	level integer not null,
 	created_at timestamp without time zone NOT NULL,
 	owner_id integer not null,
-	updated_by integer
+	updated_by integer,
+	can_create_task boolean not null,
+	can_create_product boolean not null
 );
 
 create table images (
 	id serial primary key,
 	company_id integer not null REFERENCES companies,
+	type text,
+	mapping_id integer,
+	position integer,
 	created_at timestamp without time zone NOT NULL,
 	owner_id integer not null
 );
@@ -45,6 +50,7 @@ create table users (
 	name text not null,
 	phone text,
 	work_id text,
+	avatar_id integer REFERENCES images,
 	birthday timestamp without time zone,
 	joined_date timestamp without time zone
 );
@@ -62,12 +68,14 @@ create table products (
 	model text not null,
 	name text not null,
 	description text,
+	image_id integer REFERENCES images,
 	combined_product boolean not null default false,
-	net_cost decimal,
-	market_price decimal,
-	price_visible_role_id integer REFERENCES roles,
 	labor_cost decimal,
 	visible_role_id integer REFERENCES roles,
+	sensitive_net_cost decimal,
+	sensitive_market_price decimal,
+	sensitive_description text,
+	sensitive_visible_role_id integer REFERENCES roles,
 	created_at timestamp without time zone NOT NULL,
 	owner_id integer not null REFERENCES users,
 	updated_by integer REFERENCES users
@@ -85,6 +93,8 @@ create table product_combinations (
 );
 
 -- Not deployed yet 
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
 
 create table tasks (
 	id serial primary key,

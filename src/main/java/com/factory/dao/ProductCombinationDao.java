@@ -5,20 +5,19 @@ import java.util.List;
 
 import com.factory.dao.impl.QueryTerm;
 import com.factory.dao.impl.RelationalOpType;
-import com.factory.domain.Role;
+import com.factory.domain.ProductCombination;
 import com.factory.utils.Pair;
 
-public interface RoleDao extends CommonDao<Role>{
+public interface ProductCombinationDao extends CommonDao<ProductCombination>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
-		COMPANY_ID,
-		NAME,
-		LEVEL,
+		PARENT_ID,
+		CHILD_ID,
+		COUNT,
+		STEP,
 		CREATED_AT,
 		OWNER_ID,
-		UPDATED_BY,
-		CAN_CREATE_TASK,
-		CAN_CREATE_PRODUCT;
+		UPDATED_BY;
 
 		public boolean isPK = false;
 		public String name;
@@ -45,13 +44,12 @@ public interface RoleDao extends CommonDao<Role>{
 
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
-		new Pair<Enum<?>, String>(Field.COMPANY_ID, "INTEGER NOT NULL"),
-		new Pair<Enum<?>, String>(Field.NAME, "TEXT NOT NULL"),
-		new Pair<Enum<?>, String>(Field.LEVEL, "INTEGER NOT NULL"),
+		new Pair<Enum<?>, String>(Field.PARENT_ID, "INTEGER NOT NULL"),
+		new Pair<Enum<?>, String>(Field.CHILD_ID, "INTEGER NOT NULL"),
+		new Pair<Enum<?>, String>(Field.COUNT, "INTEGER NOT NULL"),
+		new Pair<Enum<?>, String>(Field.STEP, "INTEGER NOT NULL"),
 		new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE NOT NULL"),
 		new Pair<Enum<?>, String>(Field.OWNER_ID, "INTEGER NOT NULL"),
-		new Pair<Enum<?>, String>(Field.UPDATED_BY, "INTEGER"),
-		new Pair<Enum<?>, String>(Field.CAN_CREATE_TASK, "BOOLEAN NOT NULL"),
-		new Pair<Enum<?>, String>(Field.CAN_CREATE_PRODUCT, "BOOLEAN NOT NULL"));
+		new Pair<Enum<?>, String>(Field.UPDATED_BY, "INTEGER"));
 
 }

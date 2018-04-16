@@ -10,6 +10,8 @@ public class Role {
 	private Instant createdAt;
 	private Integer ownerId;
 	private Integer updatedBy;
+	private Boolean canCreateTask;
+	private Boolean canCreateProduct;
 
 	public int getId() {
 		return id;
@@ -65,6 +67,22 @@ public class Role {
 
 	public void setUpdatedBy(Integer updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Boolean getCanCreateTask() {
+		return canCreateTask;
+	}
+
+	public void setCanCreateTask(Boolean canCreateTask) {
+		this.canCreateTask = canCreateTask;
+	}
+
+	public Boolean getCanCreateProduct() {
+		return canCreateProduct;
+	}
+
+	public void setCanCreateProduct(Boolean canCreateProduct) {
+		this.canCreateProduct = canCreateProduct;
 	}
 
 }

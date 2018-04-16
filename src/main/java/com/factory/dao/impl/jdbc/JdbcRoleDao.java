@@ -29,6 +29,8 @@ public class JdbcRoleDao extends JdbcBaseDao<Role> implements RoleDao{
 		params.addValue(RoleDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 		params.addValue(RoleDao.Field.OWNER_ID.name, obj.getOwnerId());
 		params.addValue(RoleDao.Field.UPDATED_BY.name, obj.getUpdatedBy());
+		params.addValue(RoleDao.Field.CAN_CREATE_TASK.name, obj.getCanCreateTask());
+		params.addValue(RoleDao.Field.CAN_CREATE_PRODUCT.name, obj.getCanCreateProduct());
 
 		return params;
 	}
@@ -47,6 +49,8 @@ public class JdbcRoleDao extends JdbcBaseDao<Role> implements RoleDao{
 				obj.setCreatedAt(rs.getTimestamp(RoleDao.Field.CREATED_AT.name).toInstant());
 				obj.setOwnerId((Integer)rs.getObject(RoleDao.Field.OWNER_ID.name));
 				obj.setUpdatedBy((Integer)rs.getObject(RoleDao.Field.UPDATED_BY.name));
+				obj.setCanCreateTask((Boolean)rs.getObject(RoleDao.Field.CAN_CREATE_TASK.name));
+				obj.setCanCreateProduct((Boolean)rs.getObject(RoleDao.Field.CAN_CREATE_PRODUCT.name));
 
 				return obj;
 			}
