@@ -7,6 +7,9 @@ import com.factory.dao.CompanyDao;
 import com.factory.dao.RoleDao;
 import com.factory.dao.ImageDao;
 import com.factory.dao.UserDao;
+import com.factory.dao.UserActivationDao;
+import com.factory.dao.ProductDao;
+
 import com.factory.dao.DataSourceRegistry;
 import com.factory.dao.SchemaTable;
 import com.factory.dao.SdkDataSource;
@@ -19,7 +22,9 @@ public enum CoreTableType implements SchemaTable
 	COMPANIES(SdkDataSourceType.CORE, CompanyDao.FieldTypes),
 	ROLES(SdkDataSourceType.CORE, RoleDao.FieldTypes),
 	IMAGES(SdkDataSourceType.CORE, ImageDao.FieldTypes),
-	USERS(SdkDataSourceType.CORE, UserDao.FieldTypes)
+	USERS(SdkDataSourceType.CORE, UserDao.FieldTypes),
+	USER_ACTIVATIONS(SdkDataSourceType.CORE, UserActivationDao.FieldTypes),
+	PRODUCTS(SdkDataSourceType.CORE, ProductDao.FieldTypes)
 	;
 
 
