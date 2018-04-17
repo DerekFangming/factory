@@ -1,60 +1,29 @@
 package com.factory.exceptions;
 
-import com.factory.utils.ErrorMessage;
-
 @SuppressWarnings("serial")
-public class NotFoundException extends SdkException{
-	private NotFoundExceptionType typeNotFound = NotFoundExceptionType.NOT_SPECIFIED;
+public class NotFoundException extends RuntimeException {
 	
+	private ErrorType errorType = ErrorType.UNKNOWN_ERROR;
 	
-	// TODO: Could modify message to prepend with typeNotFound.toString()
 	public NotFoundException(){
-		super(ErrorMessage.UNKNOWN_ERROR.getMsg());
+		super(ErrorType.UNKNOWN_ERROR.getMessage());
 	}
 
-	public NotFoundException(NotFoundExceptionType typeNotFound){
-		super();
-		this.typeNotFound = typeNotFound;
+	public NotFoundException(ErrorType errorType){
+		super(errorType.getMessage());
+		this.errorType = errorType;
 	}
 
 	public NotFoundException(String message){
 		super(message);
 	}
-
-	public NotFoundException(NotFoundExceptionType typeNotFound, String message){
-		super(message);
-		
-		this.typeNotFound = typeNotFound;
-	}
-
-	public NotFoundException(Throwable cause){
+	
+	public NotFoundException(Throwable cause) {
 		super(cause);
 	}
-
-	public NotFoundException(NotFoundExceptionType typeNotFound, Throwable cause){
-		super(cause);
-		this.typeNotFound = typeNotFound;
-	}
-
-	public NotFoundException(String message, Throwable cause){
-		super(message, cause);
-	}
-
-	public NotFoundException(NotFoundExceptionType typeNotFound, String message, Throwable cause){
-		super(message, cause);
-		this.typeNotFound = typeNotFound;
+	
+	public ErrorType getErrorType(){
+		return this.errorType;
 	}
 	
-	public NotFoundExceptionType getType(){
-		return this.typeNotFound;
-	}
-	
-	/*
-	@Override
-	public String getMessage()
-	{
-		return this.typeNotFound.toString() + ": " + super.getMessage();
-	}
-	*/
 }
-

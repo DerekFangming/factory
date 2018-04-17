@@ -36,7 +36,6 @@ import com.factory.dao.impl.QueryType;
 import com.factory.dao.impl.RelationalOpType;
 import com.factory.dao.impl.SdkDataSourceImpl;
 import com.factory.domain.EnumType;
-import com.factory.exceptions.ExceptionsHelper;
 import com.factory.exceptions.NotFoundException;
 
 //public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
@@ -245,8 +244,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
 
     if(results.size() == 0)
     {
-      throw new NotFoundException(
-        ExceptionsHelper.dbIdNotFound(TABLE_NAME, dbId));
+      throw new NotFoundException();
     }
 
     return results.get(0);

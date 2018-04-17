@@ -33,7 +33,7 @@ create table images (
 
 create table users (
 	id serial primary key,
-	username text not null,
+	username text not null UNIQUE,
 	password text not null,
 	access_token text,
 	verification_code text,
