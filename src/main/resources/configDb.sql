@@ -1,9 +1,15 @@
+/* Cheat sheet
+alter table companies alter column licensed drop default;
+ALTER TABLE companies ALTER COLUMN licensed TYPE integer using licensed::integer;
+ALTER TABLE companies RENAME licensed TO license_level;
+*/
+
 create table companies (
 	id serial primary key,
 	name text not null,
 	description text,
 	industry text,
-	licensed boolean not null default false,
+	license_level integer not null,
 	created_at timestamp without time zone NOT NULL,
 	owner_id integer not null,
 	updated_by integer
@@ -55,6 +61,15 @@ create table users (
 	joined_date timestamp without time zone
 );
 
+insert into companies (name, description, industry, license_level, created_at, owner_id)
+values ('Factory', 'The admin', 'IT', 3, now(), 1);
+
+insert into roles (company_id, name, level, created_at, owner_id, can_create_task, can_create_product)
+values (1, 'Super Admin', 1, now(), 1, true, true);
+
+insert into users (username, password, confirmed, salt, created_at, role_id, company_id, activated, name)
+values ('synfm@factory.com', '$2a$10$/cqsHN1ECwO/HB20hZJO6.pmH3MfxgG/nrUyr2YpBnCwMrrGTZd.C', true, '$2a$10$s9816.SRCwXhP9Lk/GBqSO', now(), 1, 1, true, 'Super Admin');
+
 create table user_activations (
 	id serial primary key,
 	requester_id integer not null REFERENCES users,
@@ -92,9 +107,20 @@ create table product_combinations (
 	updated_by integer REFERENCES users
 );
 
+-- Need to be deployed
+create table error_logs (
+	id serial primary key,
+	url text,
+	param text,
+	trace text,
+	created_at timestamp without time zone not null
+);
+
+alter table companies alter column licensed drop default;
+ALTER TABLE companies ALTER COLUMN licensed TYPE integer using licensed::integer;
+ALTER TABLE companies RENAME licensed TO license_level;
+
 -- Not deployed yet 
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
 
 create table tasks (
 	id serial primary key,

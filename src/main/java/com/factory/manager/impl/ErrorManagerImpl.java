@@ -11,11 +11,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import com.factory.dao.ErrorLogDao;
+import com.factory.domain.ErrorLog;
+import com.factory.exceptions.ErrorType;
+import com.factory.exceptions.InvalidParamException;
 import com.factory.exceptions.NotFoundException;
 import com.factory.manager.ErrorManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class ErrorManagerImpl implements ErrorManager {
 	
-	//@Autowired private ErrorLogDao errorLogDao;
+	@Autowired private ErrorLogDao errorLogDao;
 	
 	@Override
 	public void logError(Exception e) {
@@ -70,25 +73,32 @@ public class ErrorManagerImpl implements ErrorManager {
 	private Map<String, Object> createErrorRespondFromException (Exception e, String url, String params) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		boolean writeToLog = true;
-		/*if (e instanceof NotFoundException) {
+		if (e instanceof NotFoundException) {
 			writeToLog = false;
-			respond.put("error", e.getMessage());
-		} else if(e instanceof SessionExpiredException) {
-			writeToLog = false;
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
-		} else if (e instanceof IllegalStateException) {
-			respond.put("error", e.getMessage());
-		} else if (e instanceof NullPointerException || e instanceof NumberFormatException || e instanceof ClassCastException) {
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		} else if (e instanceof FileNotFoundException) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
-		} else if (e instanceof IOException) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
+			ErrorType errorType = ((NotFoundException) e).getErrorType();
+			respond.put("errCode", errorType.getCode());
+			respond.put("errMsg", errorType.getMessage());
+		} 
+//		else if(e instanceof SessionExpiredException) {
+//			writeToLog = false;
+//			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+//		}
+//		else if (e instanceof IllegalStateException) {
+//			respond.put("error", e.getMessage());
+//		} 
+		else if (e instanceof InvalidParamException || e instanceof NumberFormatException || e instanceof ClassCastException) {
+			respond.put("errCode", ErrorType.INVALID_PARAMS.getCode());
+			respond.put("errMsg", ErrorType.INVALID_PARAMS.getMessage());
+		} else if (e instanceof FileNotFoundException || e instanceof IOException) {
+			respond.put("errCode", ErrorType.INTERNAL_ERROR.getCode());
+			respond.put("errMsg", ErrorType.INTERNAL_ERROR.getMessage());
 		} else if (e instanceof DataIntegrityViolationException) {
-			respond.put("error", ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
+			respond.put("errCode", ErrorType.INTERNAL_ERROR.getCode());
+			respond.put("errMsg", ErrorType.INTERNAL_ERROR.getMessage());
 		} else{
-			respond.put("error", ErrorMessage.UNKNOWN_ERROR.getMsg());
-		}*/
+			respond.put("errCode", ErrorType.UNKNOWN_ERROR.getCode());
+			respond.put("errMsg", ErrorType.UNKNOWN_ERROR.getMessage());
+		}
 		
 		if(writeToLog) {
 			Writer writer = new StringWriter();
@@ -101,23 +111,12 @@ public class ErrorManagerImpl implements ErrorManager {
 	}
 	
 	private void saveToErrorLog(String url, String params, String trace) {
-//		try {
-//			ErrorLog errorLog = new ErrorLog();
-//			errorLog.setUrl(StringUtils.abbreviate(url, 100));
-//			errorLog.setParam(params);
-//			errorLog.setTrace(trace);
-//			errorLog.setCreatedAt(Instant.now());
-//			errorLogDao.persist(errorLog);
-//		} catch (Exception e1) {
-//			try {
-//				ErrorLog errorLog = new ErrorLog();
-//				errorLog.setUrl(StringUtils.abbreviate(url, 100));
-//				errorLog.setParam(params);
-//				errorLog.setTrace("Cannot read or having other issues");
-//				errorLog.setCreatedAt(Instant.now());
-//				errorLogDao.persist(errorLog);
-//			} catch(Exception e2){}
-//		}
+		ErrorLog errorLog = new ErrorLog();
+		errorLog.setUrl(url);
+		errorLog.setParam(params);
+		errorLog.setTrace(trace);
+		errorLog.setCreatedAt(Instant.now());
+		errorLogDao.persist(errorLog);
 	}
 	
 	private String getPostRequestsString(Map<String, Object> request) {

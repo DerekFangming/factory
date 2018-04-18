@@ -24,7 +24,8 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try {
-			//
+			String regCode = (String)request.get("regcode");
+			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/register", request);
 		}
@@ -37,6 +38,12 @@ public class UserController {
 
 		String username = (String) Utils.notNull(request.get("username"));
 		String password = (String) Utils.notNull(request.get("password"));
+		
+		
+		
+		
+		
+		
 		System.out.println(BCrypt.gensalt());
 		
 		String pw_hash = BCrypt.hashpw(password, BCrypt.gensalt());

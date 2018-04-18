@@ -1,12 +1,16 @@
 package com.factory.manager.impl;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.factory.dao.UserDao;
+import com.factory.dao.impl.QueryTerm;
 import com.factory.domain.User;
+import com.factory.exceptions.NotFoundException;
 import com.factory.manager.UserManager;
 
 @Component
@@ -38,6 +42,18 @@ public class UserManagerImpl implements UserManager {
 		user.setJoinedDate(joinedDate);
 		
 		return userDao.persist(user);
+	}
+
+	@Override
+	public User getUserByUsername(String username) throws NotFoundException {
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username.toLowerCase()));
+		try{
+			return userDao.findObject(terms);
+		}catch(NotFoundException e){
+			//throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
+		return null;
 	}
 	
 

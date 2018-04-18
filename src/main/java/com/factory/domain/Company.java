@@ -7,7 +7,7 @@ public class Company {
 	private String name;
 	private String description;
 	private String industry;
-	private Boolean licensed;
+	private Integer licenseLevel;
 	private Instant createdAt;
 	private Integer ownerId;
 	private Integer updatedBy;
@@ -44,12 +44,12 @@ public class Company {
 		this.industry = industry;
 	}
 
-	public Boolean getLicensed() {
-		return licensed;
+	public Integer getLicenseLevel() {
+		return licenseLevel;
 	}
 
-	public void setLicensed(Boolean licensed) {
-		this.licensed = licensed;
+	public void setLicenseLevel(Integer licenseLevel) {
+		this.licenseLevel = licenseLevel;
 	}
 
 	public Instant getCreatedAt() {

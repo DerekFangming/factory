@@ -10,6 +10,7 @@ import com.factory.dao.UserDao;
 import com.factory.dao.UserActivationDao;
 import com.factory.dao.ProductDao;
 import com.factory.dao.ProductCombinationDao;
+import com.factory.dao.ErrorLogDao;
 
 import com.factory.dao.DataSourceRegistry;
 import com.factory.dao.SchemaTable;
@@ -26,7 +27,8 @@ public enum CoreTableType implements SchemaTable
 	USERS(SdkDataSourceType.CORE, UserDao.FieldTypes),
 	USER_ACTIVATIONS(SdkDataSourceType.CORE, UserActivationDao.FieldTypes),
 	PRODUCTS(SdkDataSourceType.CORE, ProductDao.FieldTypes),
-	PRODUCT_COMBINATIONS(SdkDataSourceType.CORE, ProductCombinationDao.FieldTypes) 
+	PRODUCT_COMBINATIONS(SdkDataSourceType.CORE, ProductCombinationDao.FieldTypes),
+	ERROR_LOGS(SdkDataSourceType.CORE, ErrorLogDao.FieldTypes)
 	;
 
 
