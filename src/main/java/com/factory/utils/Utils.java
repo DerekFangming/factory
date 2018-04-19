@@ -10,8 +10,6 @@ import com.factory.exceptions.InvalidParamException;
 
 public class Utils {
 	
-	public static boolean prodMode  = false;
-	
 	public static Date parseDate(Instant instant) {
 		try {
 			return Date.from(instant);

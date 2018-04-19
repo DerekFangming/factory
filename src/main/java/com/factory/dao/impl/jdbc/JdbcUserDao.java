@@ -27,6 +27,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 		params.addValue(UserDao.Field.USERNAME.name, obj.getUsername());
 		params.addValue(UserDao.Field.PASSWORD.name, obj.getPassword());
 		params.addValue(UserDao.Field.ACCESS_TOKEN.name, obj.getAccessToken());
+		params.addValue(UserDao.Field.REMEMBER.name, obj.getRemember());
 		params.addValue(UserDao.Field.VERIFICATION_CODE.name, obj.getVerificationCode());
 		params.addValue(UserDao.Field.CONFIRMED.name, obj.getConfirmed());
 		params.addValue(UserDao.Field.SALT.name, obj.getSalt());
@@ -59,6 +60,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 				obj.setUsername(rs.getString(UserDao.Field.USERNAME.name));
 				obj.setPassword(rs.getString(UserDao.Field.PASSWORD.name));
 				obj.setAccessToken(rs.getString(UserDao.Field.ACCESS_TOKEN.name));
+				obj.setRemember((Boolean)rs.getObject(UserDao.Field.REMEMBER.name));
 				obj.setVerificationCode(rs.getString(UserDao.Field.VERIFICATION_CODE.name));
 				obj.setConfirmed((Boolean)rs.getObject(UserDao.Field.CONFIRMED.name));
 				obj.setSalt(rs.getString(UserDao.Field.SALT.name));

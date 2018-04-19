@@ -1,7 +1,5 @@
 package com.factory.manager.impl;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.factory.dao.ErrorLogDao;
 import com.factory.domain.ErrorLog;
 import com.factory.exceptions.ErrorType;
+import com.factory.exceptions.InternalServerException;
 import com.factory.exceptions.InvalidParamException;
 import com.factory.exceptions.InvalidStateException;
 import com.factory.exceptions.NotFoundException;
@@ -80,23 +79,16 @@ public class ErrorManagerImpl implements ErrorManager {
 			respond.put("errCode", errorType.getCode());
 			respond.put("errMsg", errorType.getMessage());
 		} else if (e instanceof InvalidStateException) {
-			ErrorType errorType = ((NotFoundException) e).getErrorType();
+			ErrorType errorType = ((InvalidStateException) e).getErrorType();
 			respond.put("errCode", errorType.getCode());
 			respond.put("errMsg", errorType.getMessage());
-		}
-//		else if(e instanceof SessionExpiredException) {
-//			writeToLog = false;
-//			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
-//		}
-//		else if (e instanceof IllegalStateException) {
-//			respond.put("error", e.getMessage());
-//		} 
-		else if (e instanceof InvalidParamException || e instanceof NumberFormatException || e instanceof ClassCastException) {
+		} else if(e instanceof InternalServerException) {
+			ErrorType errorType = ((InternalServerException) e).getErrorType();
+			respond.put("errCode", errorType.getCode());
+			respond.put("errMsg", errorType.getMessage());
+		} else if (e instanceof InvalidParamException || e instanceof NumberFormatException || e instanceof ClassCastException) {
 			respond.put("errCode", ErrorType.INVALID_PARAMS.getCode());
 			respond.put("errMsg", ErrorType.INVALID_PARAMS.getMessage());
-		} else if (e instanceof FileNotFoundException || e instanceof IOException) {
-			respond.put("errCode", ErrorType.INTERNAL_ERROR.getCode());
-			respond.put("errMsg", ErrorType.INTERNAL_ERROR.getMessage());
 		} else if (e instanceof DataIntegrityViolationException) {
 			respond.put("errCode", ErrorType.INTERNAL_ERROR.getCode());
 			respond.put("errMsg", ErrorType.INTERNAL_ERROR.getMessage());

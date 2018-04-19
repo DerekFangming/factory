@@ -7,6 +7,7 @@ public class User {
 	private String username;
 	private String password;
 	private String accessToken;
+	private Boolean remember;
 	private String verificationCode;
 	private Boolean confirmed;
 	private String salt;
@@ -55,6 +56,14 @@ public class User {
 
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
+	}
+
+	public Boolean getRemember() {
+		return remember;
+	}
+
+	public void setRemember(Boolean remember) {
+		this.remember = remember;
 	}
 
 	public String getVerificationCode() {

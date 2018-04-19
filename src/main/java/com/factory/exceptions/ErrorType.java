@@ -3,12 +3,15 @@ package com.factory.exceptions;
 public enum ErrorType {
 	//General
 	UNKNOWN_ERROR(100, "Unknown error. Please contact support."),
-	INVALID_PARAMS(101, "The input paramters are not correct. Please contact support."),
-	INTERNAL_ERROR(102, "Internal error. Please contact support."),
+	INTERNAL_SERVER_ERROR(101, "Internal server error. Please contact support."),
+	INVALID_PARAMS(102, "The input paramters are not correct. Please contact support."),
+	INTERNAL_ERROR(103, "Internal error. Please contact support."),
 	//User
 	USER_NOT_FOUND(201, "The user does not exist."),
 	INVALID_REG_CODE(202, "The registration code you entered is invalid."),
 	USERNAME_UNAVAILABLE(203, "The username is already taken. Please try a different one."),
+	//Role
+	ROLE_NOT_FOUND(201, "The role does not exist."),
 	;
 	
 	
