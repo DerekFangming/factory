@@ -108,17 +108,6 @@ create table product_combinations (
 );
 
 -- Need to be deployed
-create table error_logs (
-	id serial primary key,
-	url text,
-	param text,
-	trace text,
-	created_at timestamp without time zone not null
-);
-
-alter table companies alter column licensed drop default;
-ALTER TABLE companies ALTER COLUMN licensed TYPE integer using licensed::integer;
-ALTER TABLE companies RENAME licensed TO license_level;
 
 -- Not deployed yet 
 

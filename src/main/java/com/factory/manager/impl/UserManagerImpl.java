@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.factory.dao.UserDao;
 import com.factory.dao.impl.QueryTerm;
 import com.factory.domain.User;
+import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.NotFoundException;
 import com.factory.manager.UserManager;
 
@@ -51,9 +52,24 @@ public class UserManagerImpl implements UserManager {
 		try{
 			return userDao.findObject(terms);
 		}catch(NotFoundException e){
-			//throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+			throw new NotFoundException(ErrorType.USER_NOT_FOUND);
 		}
-		return null;
+	}
+
+	@Override
+	public User getUserByRegCode(String regCode) throws NotFoundException {
+		return getUserByRegCode(regCode, ErrorType.USER_NOT_FOUND);
+	}
+
+	@Override
+	public User getUserByRegCode(String regCode, ErrorType errorType) throws NotFoundException {
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.REGISTRATION_CODE.getQueryTerm(regCode.toUpperCase()));
+		try{
+			return userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(errorType);
+		}
 	}
 	
 

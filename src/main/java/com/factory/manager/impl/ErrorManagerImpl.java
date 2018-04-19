@@ -19,6 +19,7 @@ import com.factory.dao.ErrorLogDao;
 import com.factory.domain.ErrorLog;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
+import com.factory.exceptions.InvalidStateException;
 import com.factory.exceptions.NotFoundException;
 import com.factory.manager.ErrorManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -78,7 +79,11 @@ public class ErrorManagerImpl implements ErrorManager {
 			ErrorType errorType = ((NotFoundException) e).getErrorType();
 			respond.put("errCode", errorType.getCode());
 			respond.put("errMsg", errorType.getMessage());
-		} 
+		} else if (e instanceof InvalidStateException) {
+			ErrorType errorType = ((NotFoundException) e).getErrorType();
+			respond.put("errCode", errorType.getCode());
+			respond.put("errMsg", errorType.getMessage());
+		}
 //		else if(e instanceof SessionExpiredException) {
 //			writeToLog = false;
 //			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());

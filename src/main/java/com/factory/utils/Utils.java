@@ -3,6 +3,8 @@ package com.factory.utils;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.factory.exceptions.InvalidParamException;
 
@@ -18,6 +20,14 @@ public class Utils {
 		}
 	}
 	
+	public static Instant parseInstantStr(String instantStr) {
+		try {
+			return Instant.parse(instantStr);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	public static Instant parseTimestamp(Timestamp timestamp) {
 		return timestamp == null ? null : timestamp.toInstant();
 	}
@@ -27,6 +37,15 @@ public class Utils {
 			throw new InvalidParamException();
 		}
 		return o;
+	}
+	
+	public boolean isEmail(String email) {
+		if (email == null)
+			return false;
+		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+		Matcher m = p.matcher(email);
+		
+		return m.matches();
 	}
 
 }

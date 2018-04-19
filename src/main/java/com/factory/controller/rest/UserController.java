@@ -1,5 +1,6 @@
 package com.factory.controller.rest;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,19 +13,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.factory.domain.User;
+import com.factory.exceptions.ErrorType;
+import com.factory.exceptions.InvalidStateException;
+import com.factory.exceptions.NotFoundException;
 import com.factory.manager.ErrorManager;
+import com.factory.manager.UserManager;
 import com.factory.utils.Utils;
 
 @Controller
 public class UserController {
 	
 	@Autowired private ErrorManager errorManager;
+	@Autowired private UserManager userManager;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try {
 			String regCode = (String)request.get("regcode");
+			
+			if (regCode != null) { // Registering with a registration code
+				String username = (String) Utils.notNull(request.get("username"));
+				String password = (String) Utils.notNull(request.get("password"));
+				String name = (String) Utils.notNull(request.get("name"));
+				String phone = (String) request.get("phone");
+				String workId = (String) request.get("workIdd");
+				Instant birthday = Utils.parseInstantStr((String) request.get("birthday"));
+				Instant joinedDate = Utils.parseInstantStr((String) request.get("joinedDate"));
+				String avatar = (String) request.get("avatar");
+				
+				User manager = userManager.getUserByRegCode(regCode, ErrorType.INVALID_REG_CODE);
+				
+				username = username.toLowerCase();
+				try {
+					userManager.getUserByUsername(username);
+					throw new InvalidStateException(ErrorType.USERNAME_UNAVAILABLE);
+				} catch (NotFoundException ignored) {}
+				
+				Integer avatarId = null;
+				if (avatar != null) {
+					//TODO
+				}
+				
+				String salt = BCrypt.gensalt();
+				password = BCrypt.hashpw(password, salt);
+				
+				Integer roleId = null;//TODO also add access token
+				int userId = userManager.createUser(username, password, false, salt, null, roleId, manager.getId(), manager.getCompanyId(), !manager.getVerificationNeeded(), name, phone, workId, avatarId, birthday, joinedDate);
+				respond.put("userId", userId);
+			}
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/register", request);
