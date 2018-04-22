@@ -1,5 +1,6 @@
 package com.factory.controller.rest;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +21,12 @@ import com.factory.exceptions.InternalServerException;
 import com.factory.exceptions.InvalidStateException;
 import com.factory.exceptions.NotFoundException;
 import com.factory.manager.ErrorManager;
+import com.factory.manager.ImageManager;
 import com.factory.manager.RoleManager;
 import com.factory.manager.UserManager;
+import com.factory.utils.Email;
+import com.factory.utils.Params;
+import com.factory.utils.Token;
 import com.factory.utils.Utils;
 
 @Controller
@@ -30,23 +35,24 @@ public class UserController {
 	@Autowired private ErrorManager errorManager;
 	@Autowired private UserManager userManager;
 	@Autowired private RoleManager roleManager;
-	
+	@Autowired private ImageManager imageManager;
+	 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try {
-			String regCode = (String)request.get("regcode");
+			String username = (String) Utils.notNull(request.get("username"));
+			String password = (String) Utils.notNull(request.get("password"));
+			boolean remember = (boolean) Utils.notNull(request.get("remember"));
+			String name = (String) Utils.notNull(request.get("name"));
+			String phone = (String) request.get("phone");
+			String workId = (String) request.get("workId");
+			Instant birthday = Utils.parseInstantStr((String) request.get("birthday"));
+			Instant joinedDate = Utils.parseInstantStr((String) request.get("joinedDate"));
+			String avatar = (String) request.get("avatar");
 			
+			String regCode = (String)request.get("regCode");
 			if (regCode != null) { // Registering with a registration code
-				String username = (String) Utils.notNull(request.get("username"));
-				String password = (String) Utils.notNull(request.get("password"));
-				boolean remember = (boolean) Utils.notNull(request.get("remember"));
-				String name = (String) Utils.notNull(request.get("name"));
-				String phone = (String) request.get("phone");
-				String workId = (String) request.get("workIdd");
-				Instant birthday = Utils.parseInstantStr((String) request.get("birthday"));
-				Instant joinedDate = Utils.parseInstantStr((String) request.get("joinedDate"));
-				String avatar = (String) request.get("avatar");
 				
 				User manager = userManager.getUserByRegCode(regCode, ErrorType.INVALID_REG_CODE);
 				
@@ -66,14 +72,31 @@ public class UserController {
 				} catch (NotFoundException e) {
 					throw new InternalServerException(e);
 				}
+				
 				Integer avatarId = null;
 				if (avatar != null) {
-					//TODO
+					try {
+						avatarId = imageManager.createImage(avatar, manager.getCompanyId(), null, null, null, 0);
+					} catch(Exception e) {}
 				}
-				int userId = userManager.registerUser(username, password, remember, false, salt, null, roleId, manager.getId(),
+				
+				Instant expDate = Instant.now().plus(Duration.ofDays(Params.TOKEN_DEFAULT_EXP_DAY));
+				String accessToken = Token.createAccessToken(username, expDate);
+				String verificationCode = Token.createVerificationCode(username);
+				
+				int userId = userManager.createUser(username, password, accessToken, remember, verificationCode, false, salt, null, roleId, manager.getId(),
 						manager.getCompanyId(), !manager.getVerificationNeeded(), name, phone, workId, avatarId, birthday, joinedDate);
 				
-				respond.put("userId", userId);
+				if (avatar != null) {
+					imageManager.updateImageNotNull(avatarId, null, null, null, null, userId);
+				}
+				try {
+					Email.sendAccountVerification(name, username, verificationCode);
+				} catch (Exception e) {
+					errorManager.logError(e, "/register", request);
+				}
+				
+				respond.put("accessToken", accessToken);
 			}
 			
 		} catch (Exception e) {
@@ -86,7 +109,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 
-		String username = (String) Utils.notNull(request.get("username"));
+	//	String username = (String) Utils.notNull(request.get("username"));
 		String password = (String) Utils.notNull(request.get("password"));
 		
 		

@@ -9,7 +9,7 @@ CREATE SCHEMA public;
 
 create table companies (
 	id serial primary key,
-	name text not null,
+	name text not null UNIQUE,
 	description text,
 	industry text,
 	license_level integer not null,
@@ -111,8 +111,16 @@ create table product_combinations (
 	updated_by integer REFERENCES users
 );
 
--- Need to be deployed
+create table error_logs (
+	id serial primary key,
+	url text,
+	param text,
+	trace text,
+	created_at timestamp without time zone not null
+);
 
+-- Need to be deployed
+ALTER TABLE companies ADD UNIQUE (name);
 -- Not deployed yet 
 
 create table tasks (

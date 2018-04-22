@@ -18,7 +18,10 @@ public interface ImageManager {
 	 * @throws FileNotFoundException if the output file path is not available
 	 * @throws IOException if write image file process error
 	 */
-	public int createImage(String base64, String type, int typeMappingId, int ownerId, String title) 
-			throws InternalServerException;//FileNotFoundException, IOException;
+	public int createImage(String base64, int companyId, String type, Integer mappingId, Integer position,
+			Integer ownerId) throws InternalServerException;
+	
+	public void updateImageNotNull(int imageId, Integer companyId, String type, Integer mappingId, Integer position,
+			Integer ownerId);
 
 }

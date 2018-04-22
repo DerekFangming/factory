@@ -4,7 +4,6 @@ import java.time.Instant;
 
 import com.factory.domain.User;
 import com.factory.exceptions.ErrorType;
-import com.factory.exceptions.InternalServerException;
 import com.factory.exceptions.NotFoundException;
 
 public interface UserManager {
@@ -12,10 +11,6 @@ public interface UserManager {
 	public int createUser(String username, String password, String accessToken, Boolean remember, String verificationCode,
 			Boolean confirmed, String salt, Integer updatedBy, Integer roleId, Integer managerId, Integer companyId,
 			Boolean activated, String name, String phone, String workId, Integer avatarId, Instant birthday, Instant joinedDate);
-	
-	public int registerUser(String username, String password, Boolean remember, Boolean confirmed, String salt, Integer updatedBy,
-			Integer roleId, Integer managerId, Integer companyId, Boolean activated, String name, String phone, String workId,
-			Integer avatarId, Instant birthday, Instant joinedDate) throws InternalServerException;
 	
 	public User getUserByUsername(String username) throws NotFoundException;
 	
