@@ -30,7 +30,7 @@ public class Utils {
 		return timestamp == null ? null : timestamp.toInstant();
 	}
 	
-	public static <T> T notNull(T o) {
+	public static <T> T notNull(T o) throws InvalidParamException{
 		if (o == null) {
 			throw new InvalidParamException();
 		}

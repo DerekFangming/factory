@@ -7,15 +7,18 @@ public enum ErrorType {
 	INVALID_PARAMS(102, "The input paramters are not correct. Please contact support."),
 	INTERNAL_ERROR(103, "Internal error. Please contact support."),
 	//User
-	USER_NOT_FOUND(201, "The user does not exist."),
-	INVALID_REG_CODE(202, "The registration code you entered is invalid."),
-	USERNAME_UNAVAILABLE(203, "The username is already taken. Please try a different one."),
-	INVALID_USERNAME_FORMAT(204, "Username must be an email."),
+	USER_NOT_FOUND(200, "The user does not exist."),
+	INVALID_REG_CODE(201, "The registration code you entered is invalid."),
+	USERNAME_UNAVAILABLE(202, "The username is already taken. Please try a different one."),
+	INVALID_USERNAME_FORMAT(203, "Username must be an email."),
+	INVALID_ACCESS_TOKEN(204, "The access token you are using is not valid. Please login again."),
+	SESSION_EXPIRED(205, "Your login session has expired. Please log in again."),
+	USERNAME_OR_PASSWORD_INCORRECT(206, "Username and password combination is invalid. Please try again."),
 	//Role
-	ROLE_NOT_FOUND(301, "The role does not exist."),
+	ROLE_NOT_FOUND(300, "The role does not exist."),
 	//Company
-	COMPANY_NOT_FOUND(401, "The company does not exist."),
-	COMPANY_NAME_UNAVAILABLE(203, "The company name is already taken. Please try a different one."),
+	COMPANY_NOT_FOUND(400, "The company does not exist."),
+	COMPANY_NAME_UNAVAILABLE(401, "The company name is already taken. Please try a different one."),
 	;
 	
 	

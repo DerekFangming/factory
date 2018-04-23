@@ -3,6 +3,7 @@ package com.factory.exceptions;
 @SuppressWarnings("serial")
 public class InvalidStateException extends RuntimeException {
 	private ErrorType errorType = ErrorType.UNKNOWN_ERROR;
+	boolean writeToLog = true; 
 	
 	public InvalidStateException(){
 		super(ErrorType.UNKNOWN_ERROR.getMessage());
@@ -13,8 +14,18 @@ public class InvalidStateException extends RuntimeException {
 		this.errorType = errorType;
 	}
 	
-	public ErrorType getErrorType(){
+	public InvalidStateException(ErrorType errorType, boolean writeToLog){
+		super(errorType.getMessage());
+		this.errorType = errorType;
+		this.writeToLog = writeToLog;
+	}
+	
+	public ErrorType getErrorType() {
 		return this.errorType;
+	}
+	
+	public boolean getWriteToLog() {
+		return this.writeToLog;
 	}
 
 }

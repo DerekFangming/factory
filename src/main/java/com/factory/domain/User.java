@@ -25,6 +25,9 @@ public class User {
 	private Integer avatarId;
 	private Instant birthday;
 	private Instant joinedDate;
+	
+	/*Extra fields not from DB*/
+	private boolean tokenUpdated;
 
 	public int getId() {
 		return id;
@@ -200,6 +203,15 @@ public class User {
 
 	public void setJoinedDate(Instant joinedDate) {
 		this.joinedDate = joinedDate;
+	}
+
+	/*Extra methodes not from DB*/
+	public boolean isTokenUpdated() {
+		return tokenUpdated;
+	}
+
+	public void setTokenUpdated() {
+		this.tokenUpdated = true;
 	}
 
 }

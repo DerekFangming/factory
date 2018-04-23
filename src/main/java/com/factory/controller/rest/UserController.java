@@ -61,13 +61,16 @@ public class UserController {
 				throw new InvalidStateException(ErrorType.USERNAME_UNAVAILABLE);
 			} catch (NotFoundException ignored) {}
 			
+			String salt = BCrypt.gensalt();
+			password = BCrypt.hashpw(password, salt);
+			Instant expDate = Instant.now().plus(Duration.ofDays(remember ? Params.TOKEN_REMEMBER_EXP_DAY : Params.TOKEN_DEFAULT_EXP_DAY));
+			String accessToken = Token.createAccessToken(username, expDate);
+			String verificationCode = Token.createVerificationCode(username);
+			
 			String regCode = (String)request.get("regCode");
 			if (regCode != null) { // Registering with a registration code
 				
 				User manager = userManager.getUserByRegCode(regCode, ErrorType.INVALID_REG_CODE);
-				
-				String salt = BCrypt.gensalt();
-				password = BCrypt.hashpw(password, salt);
 				
 				Integer roleId = null;
 				try {
@@ -83,23 +86,12 @@ public class UserController {
 					} catch(Exception e) {}
 				}
 				
-				Instant expDate = Instant.now().plus(Duration.ofDays(Params.TOKEN_DEFAULT_EXP_DAY));
-				String accessToken = Token.createAccessToken(username, expDate);
-				String verificationCode = Token.createVerificationCode(username);
-				
 				int userId = userManager.createUser(username, password, accessToken, remember, verificationCode, false, salt, null, roleId, manager.getId(),
 						manager.getCompanyId(), !manager.getVerificationNeeded(), name, phone, workId, avatarId, birthday, joinedDate);
 				
 				if (avatar != null) {
 					imageManager.updateImageNotNull(avatarId, null, null, null, null, userId);
 				}
-				try {
-					Email.sendAccountVerification(name, username, verificationCode);
-				} catch (Exception e) {
-					errorManager.logError(e, "/register", request);
-				}
-				
-				respond.put("accessToken", accessToken);
 			} else { // Registering a new company
 				String companyName = (String) Utils.notNull(request.get("companyName"));
 				String description = (String) request.get("description");
@@ -112,9 +104,31 @@ public class UserController {
 				
 				int companyId = companyManager.createCompany(companyName, description, industry, 0);
 				
+				int roleId = roleManager.createRole(companyId, companyName, 0, 1, true, true);
 				
+				Integer avatarId = null;
+				if (avatar != null) {
+					try {
+						avatarId = imageManager.createImage(avatar, companyId, null, null, null, 0);
+					} catch(Exception e) {}
+				}
+				
+				int userId = userManager.createUser(username, password, accessToken, remember, verificationCode, false, salt, null, roleId, null,
+						companyId, true, name, phone, workId, avatarId, birthday, joinedDate);
+				
+				if (avatar != null) {
+					imageManager.updateImageNotNull(avatarId, null, null, null, null, userId);
+				}
 				
 			}
+
+			try {
+				Email.sendAccountVerification(name, username, verificationCode);
+			} catch (Exception e) {
+				errorManager.logError(e, "/register", request);
+			}
+			
+			respond.put("accessToken", accessToken);
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/register", request);
@@ -125,19 +139,60 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
-
-	//	String username = (String) Utils.notNull(request.get("username"));
-		String password = (String) Utils.notNull(request.get("password"));
 		
-		
-		
-		
-		
-		
-		System.out.println(BCrypt.gensalt());
-		
-		String pw_hash = BCrypt.hashpw(password, BCrypt.gensalt());
-		System.out.println(pw_hash);
+		try {
+			User user = null;
+			Object usernameObj = request.get("username");
+			
+			if (usernameObj != null) { //Logging in with username and password
+				String username = ((String) usernameObj).toLowerCase();
+				String password = (String) Utils.notNull(request.get("password"));
+				boolean remember = (boolean) Utils.notNull(request.get("remember"));
+				
+				try {
+					user = userManager.getUserByUsername(username);
+					password = BCrypt.hashpw(password, user.getSalt());
+					
+					if (!user.getPassword().equals(password))
+						throw new InvalidStateException();
+				} catch (Exception e) {
+					throw new InvalidStateException(ErrorType.USERNAME_OR_PASSWORD_INCORRECT);
+				}
+				
+				//If token is expired or invalid, recreate the token
+				boolean recreateAccessToken = false;
+				try{
+					Map<String, Object> result = Token.decodeJWT(user.getAccessToken());
+					Instant exp = Instant.parse((String)result.get("expire"));
+					
+					if(exp.compareTo(Instant.now()) < 0){
+						recreateAccessToken = true;
+					}
+				}catch (Exception e) {
+					recreateAccessToken = true;
+				}
+				
+				//If the flag is still false but there's a change in remember field, recreate token
+				if (recreateAccessToken == false && remember != user.getRemember())
+					recreateAccessToken = true;
+				
+				if(recreateAccessToken){
+					Instant expDate = Instant.now().plus(Duration.ofDays(remember ? Params.TOKEN_REMEMBER_EXP_DAY : Params.TOKEN_DEFAULT_EXP_DAY));
+					String accessToken = Token.createAccessToken(username, expDate);
+					
+					userManager.updateUserNotNull(user.getId(), null, null, accessToken, remember, null, null, null, null, null, null, null, null, null, null, null, null, null);
+					user.setAccessToken(accessToken);
+				}
+				
+			} else { //Logging in with access token
+				user = userManager.validateAccessToken(request);
+			}
+			
+			respond.put("accessToken", user.getAccessToken());
+			
+		} catch (Exception e) {
+			respond = errorManager.createRespondFromException(e, "/register", request);
+		}
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}

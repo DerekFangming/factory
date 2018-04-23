@@ -79,6 +79,7 @@ public class ErrorManagerImpl implements ErrorManager {
 			respond.put("errCode", errorType.getCode());
 			respond.put("errMsg", errorType.getMessage());
 		} else if (e instanceof InvalidStateException) {
+			writeToLog = ((InvalidStateException) e).getWriteToLog();
 			ErrorType errorType = ((InvalidStateException) e).getErrorType();
 			respond.put("errCode", errorType.getCode());
 			respond.put("errMsg", errorType.getMessage());

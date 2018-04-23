@@ -1,5 +1,6 @@
 package com.factory.manager.impl;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,18 @@ public class RoleManagerImpl implements RoleManager{
 	 * */
 	@Override
 	public int createRole(int companyId, String name, int level, int ownerId, boolean canCreateTask, boolean canCreateProduct) {
-		return 0;
+		
+		Role role = new Role();
+		role.setCompanyId(companyId);
+		role.setName(name);
+		role.setLevel(level);
+		role.setLevel(level);
+		role.setCreatedAt(Instant.now());
+		role.setOwnerId(ownerId);
+		role.setCanCreateTask(canCreateTask);
+		role.setCanCreateProduct(canCreateProduct);
+		
+		return roleDao.persist(role);
 	}
 	
 	@Override
