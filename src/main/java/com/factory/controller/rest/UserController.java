@@ -20,6 +20,7 @@ import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InternalServerException;
 import com.factory.exceptions.InvalidStateException;
 import com.factory.exceptions.NotFoundException;
+import com.factory.manager.CompanyManager;
 import com.factory.manager.ErrorManager;
 import com.factory.manager.ImageManager;
 import com.factory.manager.RoleManager;
@@ -35,13 +36,14 @@ public class UserController {
 	@Autowired private ErrorManager errorManager;
 	@Autowired private UserManager userManager;
 	@Autowired private RoleManager roleManager;
+	@Autowired private CompanyManager companyManager;
 	@Autowired private ImageManager imageManager;
 	 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try {
-			String username = (String) Utils.notNull(request.get("username"));
+			String username = ((String) Utils.notNull(request.get("username"))).toLowerCase();
 			String password = (String) Utils.notNull(request.get("password"));
 			boolean remember = (boolean) Utils.notNull(request.get("remember"));
 			String name = (String) Utils.notNull(request.get("name"));
@@ -51,17 +53,18 @@ public class UserController {
 			Instant joinedDate = Utils.parseInstantStr((String) request.get("joinedDate"));
 			String avatar = (String) request.get("avatar");
 			
+			if(!Utils.isEmail(username))
+				throw new InvalidStateException(ErrorType.INVALID_USERNAME_FORMAT);
+			
+			try {
+				userManager.getUserByUsername(username);
+				throw new InvalidStateException(ErrorType.USERNAME_UNAVAILABLE);
+			} catch (NotFoundException ignored) {}
+			
 			String regCode = (String)request.get("regCode");
 			if (regCode != null) { // Registering with a registration code
 				
 				User manager = userManager.getUserByRegCode(regCode, ErrorType.INVALID_REG_CODE);
-				
-				username = username.toLowerCase();
-				try {
-					userManager.getUserByUsername(username);
-					throw new InvalidStateException(ErrorType.USERNAME_UNAVAILABLE);
-				} catch (NotFoundException ignored) {}
-				
 				
 				String salt = BCrypt.gensalt();
 				password = BCrypt.hashpw(password, salt);
@@ -97,6 +100,20 @@ public class UserController {
 				}
 				
 				respond.put("accessToken", accessToken);
+			} else { // Registering a new company
+				String companyName = (String) Utils.notNull(request.get("companyName"));
+				String description = (String) request.get("description");
+				String industry = (String) request.get("industry");
+				
+				try {
+					companyManager.getCompanyByName(companyName);
+					throw new InvalidStateException(ErrorType.COMPANY_NAME_UNAVAILABLE);
+				} catch (NotFoundException ignored) {}
+				
+				int companyId = companyManager.createCompany(companyName, description, industry, 0);
+				
+				
+				
 			}
 			
 		} catch (Exception e) {
@@ -126,16 +143,32 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/validate_reg_code", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> about(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Map<String, Object>> validateRegCode(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		
 		String code = (String)request.get("regCode");
 		if (code.equals("1")) {
-			respond.put("error", "");
+			respond.put("errMsg", "");
 		} else {
-			respond.put("error", "The registration code does not exist");
+			respond.put("errMsg", "The registration code does not exist");
 		}
 		
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/check_username", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> checkUsername(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try {
+			String username = (String) Utils.notNull(request.get("username"));
+			
+			try {
+				userManager.getUserByUsername(username);
+				throw new InvalidStateException(ErrorType.USERNAME_UNAVAILABLE);
+			} catch (NotFoundException ignored) {}
+		} catch (Exception e) {
+			respond = errorManager.createRespondFromException(e, "/register", request);
+		}
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}

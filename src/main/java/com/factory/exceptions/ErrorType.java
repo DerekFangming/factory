@@ -10,8 +10,12 @@ public enum ErrorType {
 	USER_NOT_FOUND(201, "The user does not exist."),
 	INVALID_REG_CODE(202, "The registration code you entered is invalid."),
 	USERNAME_UNAVAILABLE(203, "The username is already taken. Please try a different one."),
+	INVALID_USERNAME_FORMAT(204, "Username must be an email."),
 	//Role
-	ROLE_NOT_FOUND(201, "The role does not exist."),
+	ROLE_NOT_FOUND(301, "The role does not exist."),
+	//Company
+	COMPANY_NOT_FOUND(401, "The company does not exist."),
+	COMPANY_NAME_UNAVAILABLE(203, "The company name is already taken. Please try a different one."),
 	;
 	
 	

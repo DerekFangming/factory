@@ -37,7 +37,7 @@ public class Utils {
 		return o;
 	}
 	
-	public boolean isEmail(String email) {
+	public static boolean isEmail(String email) {
 		if (email == null)
 			return false;
 		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");

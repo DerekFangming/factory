@@ -12,14 +12,6 @@ public class InvalidStateException extends RuntimeException {
 		super(errorType.getMessage());
 		this.errorType = errorType;
 	}
-
-	public InvalidStateException(String message){
-		super(message);
-	}
-	
-	public InvalidStateException(Throwable cause) {
-		super(cause);
-	}
 	
 	public ErrorType getErrorType(){
 		return this.errorType;
