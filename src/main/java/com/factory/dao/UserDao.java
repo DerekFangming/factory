@@ -70,7 +70,7 @@ public interface UserDao extends CommonDao<User>{
 		new Pair<Enum<?>, String>(Field.ROLE_ID, "INTEGER NOT NULL"),
 		new Pair<Enum<?>, String>(Field.MANAGER_ID, "INTEGER"),
 		new Pair<Enum<?>, String>(Field.COMPANY_ID, "INTEGER NOT NULL"),
-		new Pair<Enum<?>, String>(Field.REGISTRATION_CODE, "INTEGER"),
+		new Pair<Enum<?>, String>(Field.REGISTRATION_CODE, "TEXT"),
 		new Pair<Enum<?>, String>(Field.VERIFICATION_NEEDED, "BOOLEAN"),
 		new Pair<Enum<?>, String>(Field.ACTIVATED, "BOOLEAN"),
 		new Pair<Enum<?>, String>(Field.NAME, "TEXT NOT NULL"),

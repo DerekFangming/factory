@@ -16,7 +16,7 @@ public class User {
 	private Integer roleId;
 	private Integer managerId;
 	private Integer companyId;
-	private Integer registrationCode;
+	private String registrationCode;
 	private Boolean verificationNeeded;
 	private Boolean activated;
 	private String name;
@@ -133,11 +133,11 @@ public class User {
 		this.companyId = companyId;
 	}
 
-	public Integer getRegistrationCode() {
+	public String getRegistrationCode() {
 		return registrationCode;
 	}
 
-	public void setRegistrationCode(Integer registrationCode) {
+	public void setRegistrationCode(String registrationCode) {
 		this.registrationCode = registrationCode;
 	}
 

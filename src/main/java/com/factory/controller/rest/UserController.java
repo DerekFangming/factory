@@ -191,7 +191,7 @@ public class UserController {
 			respond.put("accessToken", user.getAccessToken());
 			
 		} catch (Exception e) {
-			respond = errorManager.createRespondFromException(e, "/register", request);
+			respond = errorManager.createRespondFromException(e, "/login", request);
 		}
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -200,12 +200,11 @@ public class UserController {
 	@RequestMapping(value = "/validate_reg_code", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> validateRegCode(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
-		
-		String code = (String)request.get("regCode");
-		if (code.equals("1")) {
-			respond.put("errMsg", "");
-		} else {
-			respond.put("errMsg", "The registration code does not exist");
+		try {
+			String regCode = (String) Utils.notNull(request.get("regCode"));
+			userManager.getUserByRegCode(regCode, ErrorType.INVALID_REG_CODE);
+		} catch (Exception e) {
+			respond = errorManager.createRespondFromException(e, "/validate_reg_code", request);
 		}
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -222,7 +221,7 @@ public class UserController {
 				throw new InvalidStateException(ErrorType.USERNAME_UNAVAILABLE);
 			} catch (NotFoundException ignored) {}
 		} catch (Exception e) {
-			respond = errorManager.createRespondFromException(e, "/register", request);
+			respond = errorManager.createRespondFromException(e, "/check_username", request);
 		}
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);

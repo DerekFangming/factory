@@ -69,7 +69,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 				obj.setRoleId((Integer)rs.getObject(UserDao.Field.ROLE_ID.name));
 				obj.setManagerId((Integer)rs.getObject(UserDao.Field.MANAGER_ID.name));
 				obj.setCompanyId((Integer)rs.getObject(UserDao.Field.COMPANY_ID.name));
-				obj.setRegistrationCode((Integer)rs.getObject(UserDao.Field.REGISTRATION_CODE.name));
+				obj.setRegistrationCode(rs.getString(UserDao.Field.REGISTRATION_CODE.name));
 				obj.setVerificationNeeded((Boolean)rs.getObject(UserDao.Field.VERIFICATION_NEEDED.name));
 				obj.setActivated((Boolean)rs.getObject(UserDao.Field.ACTIVATED.name));
 				obj.setName(rs.getString(UserDao.Field.NAME.name));
