@@ -2,22 +2,14 @@ package com.factory.domain;
 
 import java.time.Instant;
 
-public class User implements Principal {
+public class UserDetail implements Principal {
+	
 	private int id;
-	private String username;
 	private String password;
 	private String accessToken;
 	private Boolean remember;
-	private String verificationCode;
 	private Boolean confirmed;
 	private String salt;
-	private Instant createdAt;
-	private Integer updatedBy;
-	private Integer roleId;
-	private Integer managerId;
-	private Integer companyId;
-	private String registrationCode;
-	private Boolean verificationNeeded;
 	private Boolean activated;
 	private String name;
 	private String phone;
@@ -25,6 +17,15 @@ public class User implements Principal {
 	private Integer avatarId;
 	private Instant birthday;
 	private Instant joinedDate;
+	
+	/*Fields from company table*/
+	private String companyName;
+	private String companyIndustry;
+	
+	/*Fields from role table*/
+	private String roleName;
+	private boolean canCreateTask;
+	private boolean canCreateProduct;
 	
 	/*Extra fields not from DB*/
 	private boolean tokenUpdated;
@@ -36,14 +37,6 @@ public class User implements Principal {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	@Override
@@ -74,14 +67,6 @@ public class User implements Principal {
 		this.remember = remember;
 	}
 
-	public String getVerificationCode() {
-		return verificationCode;
-	}
-
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
-	}
-
 	public Boolean getConfirmed() {
 		return confirmed;
 	}
@@ -97,62 +82,6 @@ public class User implements Principal {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
-	}
-
-	public Instant getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Instant createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Integer getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Integer updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-
-	public Integer getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
-	}
-
-	public Integer getManagerId() {
-		return managerId;
-	}
-
-	public void setManagerId(Integer managerId) {
-		this.managerId = managerId;
-	}
-
-	public Integer getCompanyId() {
-		return companyId;
-	}
-
-	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
-	}
-
-	public String getRegistrationCode() {
-		return registrationCode;
-	}
-
-	public void setRegistrationCode(String registrationCode) {
-		this.registrationCode = registrationCode;
-	}
-
-	public Boolean getVerificationNeeded() {
-		return verificationNeeded;
-	}
-
-	public void setVerificationNeeded(Boolean verificationNeeded) {
-		this.verificationNeeded = verificationNeeded;
 	}
 
 	public Boolean getActivated() {
@@ -211,7 +140,50 @@ public class User implements Principal {
 		this.joinedDate = joinedDate;
 	}
 
-	/*Extra methodes not from DB*/
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getCompanyIndustry() {
+		return companyIndustry;
+	}
+
+	public void setCompanyIndustry(String companyIndustry) {
+		this.companyIndustry = companyIndustry;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public boolean isCanCreateTask() {
+		return canCreateTask;
+	}
+
+	public void setCanCreateTask(boolean canCreateTask) {
+		this.canCreateTask = canCreateTask;
+	}
+
+	public boolean isCanCreateProduct() {
+		return canCreateProduct;
+	}
+
+	public void setCanCreateProduct(boolean canCreateProduct) {
+		this.canCreateProduct = canCreateProduct;
+	}
+
+	public void setTokenUpdated(boolean tokenUpdated) {
+		this.tokenUpdated = tokenUpdated;
+	}
+
 	public boolean isTokenUpdated() {
 		return tokenUpdated;
 	}

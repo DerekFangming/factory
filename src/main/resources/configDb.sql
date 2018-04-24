@@ -121,8 +121,6 @@ create table error_logs (
 
 -- Need to be deployed
 
-ALTER TABLE users ALTER COLUMN registration_code TYPE text;
-
 -- Test data
 
 insert into companies (name, description, industry, license_level, created_at, owner_id)

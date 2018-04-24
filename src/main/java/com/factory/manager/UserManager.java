@@ -3,6 +3,7 @@ package com.factory.manager;
 import java.time.Instant;
 import java.util.Map;
 
+import com.factory.domain.Principal;
 import com.factory.domain.User;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
@@ -20,7 +21,8 @@ public interface UserManager {
 	public User getUserByRegCode(String regCode) throws NotFoundException;
 	public User getUserByRegCode(String regCode, ErrorType errorType) throws NotFoundException;
 	
-	public User validateAccessToken(Map<String, Object> request) throws InvalidStateException, InvalidParamException;
+	public Principal validateAccessToken(Map<String, Object> request) throws InvalidStateException, InvalidParamException;
+	public Principal validateAccessToken(Map<String, Object> request, boolean loadDetails) throws InvalidStateException, InvalidParamException;
 	
 	public void updateUserNotNull(int userId, String username, String password, String accessToken, Boolean remember,
 			String verificationCode, Boolean confirmed, Integer updatedBy, Integer roleId, Integer managerId, Integer companyId,

@@ -97,31 +97,6 @@ public enum QueryType{
 		}		
 	},
 	
-//	// TODO:
-//	// TODO: NOT NEEDED ???
-//	// TODO:
-//	FIND_BY_XREF() {
-//		@Override
-//		protected StringBuilder finalizeQueryString(QueryBuilder builder){
-//			StringBuilder sb = getXinfoQueries(builder.getSchemaTable(), ExternalReferenceDao.Field.XREF.name, builder.getActiveTerm());
-//			
-//			return super.xinfoFinalizeQueryString(sb, builder.getSymbolicExpression());
-//		}
-//	},
-//	
-//
-//	// TODO:
-//	// TODO: NOT NEEDED ???
-//	// TODO:
-//	FIND_BY_XID() {		
-//		@Override
-//		protected StringBuilder finalizeQueryString(QueryBuilder builder){
-//			StringBuilder sb = getXinfoQueries(builder.getSchemaTable(), ExternalReferenceDao.Field.ID.name, builder.getActiveTerm());
-//			
-//			return super.xinfoFinalizeQueryString(sb, builder.getSymbolicExpression());
-//		}
-//	},
-	
 //	FIND_BY_ID() {
 //		@Override
 //		protected StringBuilder getQuery(SchemaTable table, ActiveTerm includeActiveTerm){

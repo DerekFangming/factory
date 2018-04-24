@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.factory.dao.UserDao;
 import com.factory.dao.impl.NVPair;
 import com.factory.dao.impl.QueryTerm;
+import com.factory.domain.Principal;
 import com.factory.domain.User;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
@@ -84,16 +85,24 @@ public class UserManagerImpl implements UserManager {
 	}
 	
 	@Override
-	public User validateAccessToken(Map<String, Object> request) throws InvalidStateException, InvalidParamException {
+	public Principal validateAccessToken(Map<String, Object> request) throws InvalidStateException, InvalidParamException {
+		return validateAccessToken(request, false);
+	}
+	
+	@Override
+	public Principal validateAccessToken(Map<String, Object> request, boolean loadDetails) throws InvalidStateException, InvalidParamException {
 		String accessToken = (String) Utils.notNull(request.get("accessToken"));
 		try{
 			Map<String, Object> result = Token.decodeJWT(accessToken);
 			Instant exp = Instant.parse((String)result.get("expire"));
 			String username = (String) Utils.notNull(request.get("username"));
 			
-			List<QueryTerm> terms = new ArrayList<QueryTerm>();
-			terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
-			User user = userDao.findObject(terms);
+			Principal user = null;
+			if (loadDetails) {
+				
+			} else {
+				user = getUserByUsername(username);
+			}
 			
 			if(exp.compareTo(Instant.now()) < 0){//Token from client is out-dated and needs update
 				user.setTokenUpdated();

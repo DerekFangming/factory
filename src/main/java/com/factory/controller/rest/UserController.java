@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.factory.domain.Principal;
 import com.factory.domain.User;
 import com.factory.domain.type.RoleOffsetType;
 import com.factory.exceptions.ErrorType;
@@ -141,7 +142,7 @@ public class UserController {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		
 		try {
-			User user = null;
+			Principal user = null;
 			Object usernameObj = request.get("username");
 			
 			if (usernameObj != null) { //Logging in with username and password
