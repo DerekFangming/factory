@@ -20,16 +20,6 @@ public class RoleManagerImpl implements RoleManager{
 	
 	@Autowired private RoleDao roleDao;
 	
-	/*
-	 * company_id integer not null REFERENCES companies,
-	name text not null,
-	level integer not null,
-	created_at timestamp without time zone NOT NULL,
-	owner_id integer not null,
-	updated_by integer,
-	can_create_task boolean not null,
-	can_create_product boolean not null
-	 * */
 	@Override
 	public int createRole(int companyId, String name, int level, int ownerId, boolean canCreateTask, boolean canCreateProduct) {
 		

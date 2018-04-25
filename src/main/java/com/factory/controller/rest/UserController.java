@@ -93,6 +93,8 @@ public class UserController {
 				if (avatar != null) {
 					imageManager.updateImageNotNull(avatarId, null, null, null, null, userId);
 				}
+				
+				respond.put("activated", !manager.getVerificationNeeded());
 			} else { // Registering a new company
 				String companyName = (String) Utils.notNull(request.get("companyName"));
 				String description = (String) request.get("description");
@@ -121,6 +123,7 @@ public class UserController {
 					imageManager.updateImageNotNull(avatarId, null, null, null, null, userId);
 				}
 				
+				respond.put("activated", true);
 			}
 
 			try {

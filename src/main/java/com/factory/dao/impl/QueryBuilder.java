@@ -27,6 +27,8 @@ public class QueryBuilder
 	private List<QueryExpression> expressionList = new ArrayList<QueryExpression>();
 	private List<NVPair> nvpList = new ArrayList<NVPair>();
 	
+	private List<TableJoinExpression> tableJoinList;
+	
 	// Map containing:
 	// key = field name 
 	// value = next symbolic name for the key
@@ -171,6 +173,19 @@ public class QueryBuilder
 		expressionList.add(new QueryExpression(beforeOp, terms, joinOp));
 		
 		return this;
+	}
+	
+	public QueryBuilder addTableJoinExpression(TableJoinExpression exp) {
+		if (tableJoinList == null)
+			tableJoinList = new ArrayList<TableJoinExpression>();
+		
+		tableJoinList.add(exp);
+		
+		return this;
+	}
+	
+	protected List<TableJoinExpression> getTableJoinList() {
+		return tableJoinList;
 	}
 
 	// Nesting the calls so it is clear from what the StringBuilder is derived.

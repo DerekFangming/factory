@@ -1,5 +1,7 @@
 package com.factory.dao.impl;
 
+import java.util.List;
+
 import com.factory.dao.SchemaTable;
 import com.factory.utils.Pair;
 
@@ -131,6 +133,13 @@ public enum QueryType{
 				.append(builder.getReturnField())
 				.append(" FROM ")
 				.append(table.getTableName());
+			
+			List<TableJoinExpression> tableJoinList =  builder.getTableJoinList();
+			if (tableJoinList != null) {
+				for (TableJoinExpression t : tableJoinList) {
+					querySB.append(t.getTableJoinString());
+				}
+			}
 			
 			querySB = super.commonFindAndCountFinalizeQueryString(querySB, builder);
 			

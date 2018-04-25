@@ -33,6 +33,14 @@ public class RoleManagerTests {
 			roleManager.getRoleByIdAndLevelOffset(1, RoleOffsetType.ONE_LEVEL_DOWN);
 			fail();
 		} catch (NotFoundException e) {}
+		
+		try {
+			Role role = roleManager.getRoleByIdAndLevelOffset(2, RoleOffsetType.ONE_LEVEL_DOWN);
+			assertEquals(role.getLevel().intValue(), 1);
+			assertEquals(role.getName(), "Senior VP");
+		} catch (NotFoundException e) {
+			fail();
+		}
 	}
 
 }

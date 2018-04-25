@@ -2,7 +2,7 @@ package com.factory.domain.type;
 
 public enum RoleOffsetType {
 	
-	ONE_LEVEL_DOWN(-1);
+	ONE_LEVEL_DOWN(1);
 	
 	private int offset;
 	

@@ -186,7 +186,10 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     
     QueryInstance qi = qb.createQuery();
     
-    namedTemplate.update(qi.getQueryStr(), qi.getParams());
+    int roleAffected = namedTemplate.update(qi.getQueryStr(), qi.getParams());
+    if (roleAffected == 0) {
+    	throw new NotFoundException();
+    }
     
 //    Map<String,Object> map = params.getValues();
 //        
@@ -218,7 +221,10 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
       
     QueryInstance qi = qb.createQuery();
     
-    namedTemplate.update(qi.getQueryStr(), qi.getParams());
+    int roleAffected = namedTemplate.update(qi.getQueryStr(), qi.getParams());
+    if (roleAffected == 0) {
+    	throw new NotFoundException();
+    }
     
 //    MapSqlParameterSource params = getParamsMap(values);
 //    String query = this.getUpdateByIdSQL(params.getValues());

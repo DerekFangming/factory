@@ -1,14 +1,12 @@
 package com.factory.dao.impl;
 
-public enum LogicalOpType
-{
+public enum LogicalOpType {
 	AND,
 	OR;
 
 	protected String asString;
 	
-	LogicalOpType()
-	{
+	LogicalOpType() {
 		this.asString = " " + this.name() + " ";			
 	}		
 }
