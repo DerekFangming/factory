@@ -99,21 +99,27 @@ public class QueryBuilder
 	}
 	
 	/**
-	 * Adds the first query term to your query expression.
+	 * Adds the query term to your query expression.
 	 * @param term Query term
 	 */
-	public QueryBuilder addFirstQueryExpression(QueryTerm term){ 
+	public QueryBuilder addQueryExpression(QueryTerm term) {
+		return addQueryExpression(LogicalOpType.AND, term);
+	}
+	
+	/**
+	 * Adds a single query term to the query expression
+	 * @param beforeOp Logical operator to join this term to the expression.
+	 * @param term Query term
+	 */
+	public QueryBuilder addQueryExpression(LogicalOpType beforeOp, QueryTerm term) {
 		term = this.seenFields.process(term);
 		
 		QueryExpression qe;
 		
-		// If this is _really_ the first term, add it.
 		if(expressionList.isEmpty()){
 			qe = new QueryExpression(term);
 		}else{
-			// However, if it is not the first - for example if we added a check for isActive in	
-			// our constructor - then we'll want to add this with an AND
-			qe = new QueryExpression(LogicalOpType.AND, term);
+			qe = new QueryExpression(beforeOp, term);
 		}
 		
 		expressionList.add(qe);
@@ -129,37 +135,9 @@ public class QueryBuilder
 	 * <br/>
 	 * Or: <tt>&lt;term1&gt; OR &lt;term2&gt; OR &lt;term3&gt;</tt>
 	 */
-	public QueryBuilder addFirstQueryExpression(List<QueryTerm> terms, LogicalOpType joinOp){
-		terms = this.seenFields.processQueryTerms(terms);
-		
-		QueryExpression qe;
-		
-		// If this is _really_ the first term, add it.
-		if(expressionList.isEmpty()){
-			qe = new QueryExpression(terms, joinOp);
-		}else{
-			// However, if it is not the first - for example if we added a check for isActive in	
-			// our constructor - then we'll want to add this with an AND
-			qe = new QueryExpression(LogicalOpType.AND, terms, joinOp);
-		}
-		
-		expressionList.add(qe);
-		
-		return this;
+	public QueryBuilder addQueryExpression(List<QueryTerm> terms, LogicalOpType joinOp){
+		return addQueryExpression(LogicalOpType.AND, terms, joinOp);
 	}
-
-	/**
-	 * Adds a single query term to the query expression
-	 * @param beforeOp Logical operator to join this term to the expression.
-	 * @param term Query term
-	 */
-	public QueryBuilder addNextQueryExpression(LogicalOpType beforeOp, QueryTerm term){
-		term = this.seenFields.process(term);
-		
-		expressionList.add(new QueryExpression(beforeOp, term));
-		
-		return this;
-	}	
 
 	/**
 	 * Adds a single query term to the query expression
@@ -167,10 +145,18 @@ public class QueryBuilder
 	 * @param terms List of query terms
 	 * @param joinOp	Logical operator used to join each individual query term.
 	 */
-	public QueryBuilder addNextQueryExpression(LogicalOpType beforeOp, List<QueryTerm> terms, LogicalOpType joinOp){
+	public QueryBuilder addQueryExpression(LogicalOpType beforeOp, List<QueryTerm> terms, LogicalOpType joinOp){
 		terms = this.seenFields.processQueryTerms(terms);
 		
-		expressionList.add(new QueryExpression(beforeOp, terms, joinOp));
+		QueryExpression qe;
+		
+		if(expressionList.isEmpty()){
+			qe = new QueryExpression(terms, joinOp);
+		}else{
+			qe = new QueryExpression(beforeOp, terms, joinOp);
+		}
+		
+		expressionList.add(qe);
 		
 		return this;
 	}

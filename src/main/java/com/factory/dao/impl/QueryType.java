@@ -131,14 +131,16 @@ public enum QueryType{
 					 
 			StringBuilder querySB = new StringBuilder("SELECT ")
 				.append(builder.getReturnField())
-				.append(" FROM ")
-				.append(table.getTableName());
+				.append(" FROM ");
 			
 			List<TableJoinExpression> tableJoinList =  builder.getTableJoinList();
 			if (tableJoinList != null) {
+				querySB.append(tableJoinList.get(0).getSourceTableName());
 				for (TableJoinExpression t : tableJoinList) {
 					querySB.append(t.getTableJoinString());
 				}
+			} else {
+				querySB.append(table.getTableName());
 			}
 			
 			querySB = super.commonFindAndCountFinalizeQueryString(querySB, builder);

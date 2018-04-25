@@ -9,11 +9,20 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.factory.dao.CompanyDao;
 import com.factory.dao.UserDao;
+import com.factory.dao.UserDetailDao;
+import com.factory.dao.impl.CoreTableType;
 import com.factory.dao.impl.NVPair;
+import com.factory.dao.impl.QueryBuilder;
 import com.factory.dao.impl.QueryTerm;
+import com.factory.dao.impl.QueryType;
+import com.factory.dao.impl.RelationalOpType;
+import com.factory.dao.impl.TableJoinExpression;
+import com.factory.dao.impl.TableJoinType;
 import com.factory.domain.Principal;
 import com.factory.domain.User;
+import com.factory.domain.UserDetail;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
 import com.factory.exceptions.InvalidStateException;
@@ -27,6 +36,7 @@ import com.factory.utils.Utils;
 public class UserManagerImpl implements UserManager {
 	
 	@Autowired private UserDao userDao;
+	@Autowired private UserDetailDao userDetailDao;
 
 	@Override
 	public int createUser(String username, String password, String accessToken, Boolean remember, String verificationCode,
@@ -182,6 +192,19 @@ public class UserManagerImpl implements UserManager {
 			newValue.add(new NVPair(UserDao.Field.JOINED_DATE.name, joinedDate));
 		
 		userDao.update(userId, newValue);
+	}
+	
+	@Override
+	public UserDetail getUserDetailById(int userId) throws NotFoundException {
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USER_DETAILS, QueryType.FIND)
+				.addTableJoinExpression(new TableJoinExpression(CoreTableType.USERS, UserDao.Field.COMPANY_ID.name,
+						TableJoinType.LEFT_JOIN, CoreTableType.COMPANIES, CompanyDao.Field.ID.name))
+				.addTableJoinExpression(new TableJoinExpression(CoreTableType.USERS, UserDao.Field.ROLE_ID.name,
+						TableJoinType.LEFT_JOIN, CoreTableType.ROLES, CompanyDao.Field.ID.name))
+				.addQueryExpression(new QueryTerm(UserDetailDao.Field.ID.expression, RelationalOpType.EQ, userId))
+				.setReturnField(UserDetailDao.ReturnExpression);
+		
+		return userDetailDao.findAllObjects(qb.createQuery()).get(0);
 	}
 
 }

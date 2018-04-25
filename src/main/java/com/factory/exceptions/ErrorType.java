@@ -6,6 +6,7 @@ public enum ErrorType {
 	INTERNAL_SERVER_ERROR(101, "Internal server error. Please contact support."),
 	INVALID_PARAMS(102, "The input paramters are not correct. Please contact support."),
 	INTERNAL_ERROR(103, "Internal error. Please contact support."),
+	INSERT_ON_TABLE_JOIN(104, "Cannot insert data on a table join expression."),
 	//User
 	USER_NOT_FOUND(200, "The user does not exist."),
 	INVALID_REG_CODE(201, "The registration code you entered is invalid."),

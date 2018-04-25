@@ -181,7 +181,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
 
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.UPDATE_BY_ID);
     
-    qb.addFirstQueryExpression(new QueryTerm(this.myPkName, dbId));
+    qb.addQueryExpression(new QueryTerm(this.myPkName, dbId));
     qb.addNameValuePairs(values.getList());
     
     QueryInstance qi = qb.createQuery();
@@ -215,7 +215,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb =  QueryType.getQueryBuilder(this.myTable, QueryType.UPDATE_BY_ID);
     
-    qb.addFirstQueryExpression(new QueryTerm(this.myPkName, dbId));
+    qb.addQueryExpression(new QueryTerm(this.myPkName, dbId));
     
     qb.addNameValuePairs(values);
       
@@ -241,7 +241,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
 //    QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND_BY_ID, ActiveType.ACTIVE);
     QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
     
-    qb.addFirstQueryExpression(new QueryTerm(myTable.getPrimaryKeyName(), RelationalOpType.EQ, dbId));
+    qb.addQueryExpression(new QueryTerm(myTable.getPrimaryKeyName(), RelationalOpType.EQ, dbId));
     
     QueryInstance qi = qb.createQuery();
 
@@ -302,7 +302,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.FIND_ID);
     
-    qb.addFirstQueryExpression(terms, LogicalOpType.AND);
+    qb.addQueryExpression(terms, LogicalOpType.AND);
     
     qb.setLimit(1);
     
@@ -335,7 +335,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.FIND_ID);
     
-    qb.addFirstQueryExpression(terms, LogicalOpType.AND);
+    qb.addQueryExpression(terms, LogicalOpType.AND);
     
     QueryInstance qi = qb.createQuery();
 
@@ -403,7 +403,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
     
-    qb.addFirstQueryExpression(terms, LogicalOpType.AND);
+    qb.addQueryExpression(terms, LogicalOpType.AND);
     
     qb.setLimit(1);
     
@@ -450,7 +450,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
     
-    qb.addFirstQueryExpression(terms, LogicalOpType.AND);
+    qb.addQueryExpression(terms, LogicalOpType.AND);
     
     qb.setLimit(limit);
     
@@ -530,7 +530,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, 
       QueryType.COUNT_ALL);
     
-    qb.addFirstQueryExpression(terms, LogicalOpType.AND);
+    qb.addQueryExpression(terms, LogicalOpType.AND);
     
     QueryInstance qi = qb.createQuery();
     
@@ -630,7 +630,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.DELETE);
     
-    qb.addFirstQueryExpression(new QueryTerm(this.myPkName, dbid));
+    qb.addQueryExpression(new QueryTerm(this.myPkName, dbid));
     
     return this.delete(qb.createQuery());
   }
@@ -641,7 +641,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.DELETE);
     
-    qb.addFirstQueryExpression(term);
+    qb.addQueryExpression(term);
     
     return this.delete(qb.createQuery());
   }
@@ -652,7 +652,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.DELETE);
     
-    qb.addFirstQueryExpression(terms, LogicalOpType.AND);
+    qb.addQueryExpression(terms, LogicalOpType.AND);
     
     return this.delete(qb.createQuery());
   }

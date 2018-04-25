@@ -1,6 +1,7 @@
 package com.factory.manager;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -16,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.factory.domain.User;
+import com.factory.domain.UserDetail;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
 import com.factory.exceptions.InvalidStateException;
@@ -93,7 +95,7 @@ public class UserManagerTests {
 	}
 	
 	@Test
-	public void testa() {
+	public void testUpdateInvalidUser() {
 		try {
 			userManager.updateUserNotNull(0, "", null, null, null, null, null, null,
 					null, null, null, null, null, null, null, null, null, null);
@@ -101,6 +103,18 @@ public class UserManagerTests {
 		} catch (Exception e) {
 			assertEquals(e.getClass(), NotFoundException.class);
 		}
+	}
+	
+	@Test
+	public void testGetUserDetails() {
+		UserDetail userDetail = userManager.getUserDetailById(1);
+		assertEquals(userDetail.getName(), "Super Admin");
+		assertEquals(userDetail.getRoleName(), "Super Admin");
+		assertEquals(userDetail.getCompanyName(), "Factory");
+		assertEquals(userDetail.getCompanyIndustry(), "IT");
+		assertNull(userDetail.getPhone());
+		assertNull(userDetail.getWorkId());
+		assertNull(userDetail.getPhone());
 	}
 
 }

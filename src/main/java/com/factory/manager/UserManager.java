@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.factory.domain.Principal;
 import com.factory.domain.User;
+import com.factory.domain.UserDetail;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
 import com.factory.exceptions.InvalidStateException;
@@ -27,5 +28,7 @@ public interface UserManager {
 	public void updateUserNotNull(int userId, String username, String password, String accessToken, Boolean remember,
 			String verificationCode, Boolean confirmed, Integer updatedBy, Integer roleId, Integer managerId, Integer companyId,
 			Boolean activated, String name, String phone, String workId, Integer avatarId, Instant birthday, Instant joinedDate);
+	
+	public UserDetail getUserDetailById(int userId) throws NotFoundException;
 
 }

@@ -7,6 +7,10 @@ public class InternalServerException extends RuntimeException {
 		super(cause);
 	}
 	
+	public InternalServerException(ErrorType errorType){
+		super(errorType.getMessage());
+	}
+	
 	public ErrorType getErrorType(){
 		return ErrorType.UNKNOWN_ERROR;
 	}

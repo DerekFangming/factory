@@ -29,5 +29,9 @@ public class TableJoinExpression {
 		
 		return querySB;
 	}
+	
+	public String getSourceTableName() {
+		return sourceTable.getTableName();
+	}
 
 }
