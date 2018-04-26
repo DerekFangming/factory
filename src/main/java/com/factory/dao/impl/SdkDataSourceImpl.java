@@ -47,13 +47,9 @@ public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDat
 	
 	@Override
 	public String getNickname( ){
-		// TODO Auto-generated method stub
 		return this.dbNnickname;
 	}
 	
-//	public String getDbNickname(){
-//		return this.dbNnickname;
-//	}
 	
 	/**
 	 * Returns the database's actual name (as seen, for ex, in PgAdmin).

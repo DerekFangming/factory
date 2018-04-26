@@ -202,9 +202,10 @@ public class UserManagerImpl implements UserManager {
 				.addTableJoinExpression(new TableJoinExpression(CoreTableType.USERS, UserDao.Field.ROLE_ID.name,
 						TableJoinType.LEFT_JOIN, CoreTableType.ROLES, CompanyDao.Field.ID.name))
 				.addQueryExpression(new QueryTerm(UserDetailDao.Field.ID.expression, RelationalOpType.EQ, userId))
-				.setReturnField(UserDetailDao.ReturnExpression);
+				.setReturnField(UserDetailDao.FieldTypes);
 		
-		return userDetailDao.findAllObjects(qb.createQuery()).get(0);
+		
+		return userDetailDao.findObject(qb.createQuery());
 	}
 
 }

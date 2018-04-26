@@ -12,7 +12,6 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -378,9 +377,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     
     QueryInstance qi = qb.createQuery();
     
-    // TODO: Previously the map param was 
-    //  (MapSqlParameterSource) null
-    // Confirm this way is ok:
     List<T> results = this.namedTemplate.query(qi.getQueryStr(), qi.getParams(), 
       new RowMapperResultSetExtractor<T>(this.getRowMapper(), 1));
     
@@ -409,15 +405,20 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     
     QueryInstance qi = qb.createQuery();
 
-    List<T> results = this.namedTemplate.query(qi.getQueryStr(), qi.getParams(), 
-      new RowMapperResultSetExtractor<T>(this.getRowMapper(), 1));
+    return findObject(qi);       
+  }
+  
+  @Override
+  public T findObject(QueryInstance qi) throws NotFoundException {
+	  List<T> results = this.namedTemplate.query(qi.getQueryStr(), qi.getParams(), 
+		      new RowMapperResultSetExtractor<T>(this.getRowMapper(), 1));
 
-    if(results.size() == 0)
-    {
-      throw new NotFoundException();
-    }
+		    if(results.size() == 0)
+		    {
+		      throw new NotFoundException();
+		    }
 
-    return results.get(0);        
+		    return results.get(0);
   }
   
   @Override
@@ -430,50 +431,28 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   public List<T> findAllObjects(List<QueryTerm> terms) throws NotFoundException
   {
     return this.findMultipleObjects(terms, 0);
-    
-//    MapSqlParameterSource params = getParamsMap(values);
-//
-//    String query = this.getFindByAndedSQL(params.getValues(), 0);
-//
-//    List<T> results = this.namedTemplate.query(query, params, new RowMapperResultSetExtractor<T>(this.getRowMapper(), 1));
-//
-//    if(results.size() == 0)
-//    {
-//      throw new NotFoundException();
-//    }
-//
-//    return results;    
   }
 
   @Override
   public List<T> findMultipleObjects(List<QueryTerm> terms, int limit) throws NotFoundException
   {
-    QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
-    
-    qb.addQueryExpression(terms, LogicalOpType.AND);
-    
-    qb.setLimit(limit);
-    
-    QueryInstance qi = qb.createQuery();
-
-    return findAllObjects(qi);
-    
-//    List<T> results = this.namedTemplate.query(qi.getQueryStr(), qi.getParams(), 
-//      new RowMapperResultSetExtractor<T>(this.getRowMapper(), 1));
-//
-//    if(results.size() == 0)
-//    {
-//      throw new NotFoundException();
-//    }
-//
-//    return results;    
+    return findMultipleObjects(terms, 0, limit);   
   }
 
   @Override
   public List<T> findMultipleObjects(List<QueryTerm> terms, int start, int limit)
   {
-    throw new NotImplementedException(
-      "Need to implement findMultipleObjects(terms, start, limit)");
+	  QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
+	    
+	    qb.addQueryExpression(terms, LogicalOpType.AND);
+	    
+	    qb.setLimit(limit);
+	    
+	    qb.setOffset(start); 
+	    
+	    QueryInstance qi = qb.createQuery();
+
+	    return findAllObjects(qi); 
   }
   
   @Override
@@ -556,12 +535,11 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     boolean pass = true;
     String causeMsg = null;
     
-    // TODO: IF THIS WORKS, MOVE IT TO JdbcHelper
     calledOnce = true;
     
     try
     {
-      //fangming: In the future, if there is an error saying FATAL too many clients here
+      //In the future, if there is an error saying FATAL too many clients here
       //It is because that too many connections are open at the same time (probably 5-10) and
       // they are not closed fast enough. We may need to change the config file for this.
       Connection connection = dataSource.getConnection();
@@ -624,7 +602,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     }
   }
   
-  // TODO: @NeedsAutority("SYS_ADMIN")
   @Override
   public int deleteById(int dbid)
   {
@@ -635,7 +612,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     return this.delete(qb.createQuery());
   }
   
-  // TODO: @NeedsAutority("SYS_ADMIN")  
   @Override
   public int delete(QueryTerm term)
   {
@@ -646,7 +622,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     return this.delete(qb.createQuery());
   }
 
-  // TODO: @NeedsAutority("SYS_ADMIN")
   @Override
   public int delete(List<QueryTerm> terms)
   {
@@ -657,7 +632,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
     return this.delete(qb.createQuery());
   }
   
-  // TODO: @NeedsAutority("SYS_ADMIN")  
   @Override
   public int delete(QueryInstance qi) 
   {

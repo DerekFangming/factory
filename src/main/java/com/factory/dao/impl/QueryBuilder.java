@@ -1,12 +1,16 @@
 package com.factory.dao.impl;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import com.factory.dao.SchemaTable;
+import com.factory.exceptions.InternalServerException;
+import com.factory.utils.Pair;
 
 public class QueryBuilder
 {
@@ -81,7 +85,6 @@ public class QueryBuilder
 		return this.table;
 	}
 
-	// TODO:	What about a csv of field names?
 	/**
 	 * For an inner query, specifies the field name to return.
 	 * <p>
@@ -90,6 +93,25 @@ public class QueryBuilder
 	 */
 	public QueryBuilder setReturnField(String fieldName){
 		this.returnField = fieldName;
+
+		return this;
+	}
+	
+	public QueryBuilder setReturnField(List<Pair<Enum<?>, String>> fieldTypes){
+		this.returnField = "";
+		
+		for (Pair<Enum<?>, String> p : fieldTypes) {
+			Enum<?> enumElt = p.getFirst();
+		
+			try{
+				Field f = enumElt.getClass().getDeclaredField("expression");
+				this.returnField += (String) f.get(enumElt) + ", ";
+			}catch (Throwable t){
+				throw new InternalServerException(t);
+			}
+		}
+
+		this.returnField = StringUtils.removeEnd(this.returnField, ", ");
 
 		return this;
 	}
@@ -343,7 +365,6 @@ public class QueryBuilder
 				
 				nvp = new NVPair(term.getField(), term.getValue());
 				
-				// TODO: protected constructor that takes symName too
 				nvp.setSymbolicName(term.getSymbolicName());
 				
 				result.add(nvp);

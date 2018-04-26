@@ -165,7 +165,6 @@ public interface SchemaTable{
 		return result;
 	}
 
-	// TODO: Move this to some common DAO location 
 	// Returns the column / field name from the Enum element.
 	public static String getName(Enum<?> enumElt){
 		String colName;

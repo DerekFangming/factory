@@ -80,24 +80,5 @@ public interface UserDetailDao extends CommonDao<UserDetail>{
 		new Pair<Enum<?>, String>(Field.ROLE_NAME, "TEXT NOT NULL"),
 		new Pair<Enum<?>, String>(Field.CAN_CREATE_TASK, "BOOLEAN NOT NULL"),
 		new Pair<Enum<?>, String>(Field.CAN_CREATE_PRODUCT, "BOOLEAN NOT NULL"));
-	
-	String ReturnExpression = new StringBuilder(Field.ID.expression + ", ")
-			.append(Field.PASSWORD.expression + ", ")
-			.append(Field.ACCESS_TOKEN.expression + ", ")
-			.append(Field.REMEMBER.expression + ", ")
-			.append(Field.CONFIRMED.expression + ", ")
-			.append(Field.SALT.expression + ", ")
-			.append(Field.ACTIVATED.expression + ", ")
-			.append(Field.NAME.expression + ", ")
-			.append(Field.PHONE.expression + ", ")
-			.append(Field.WORK_ID.expression + ", ")
-			.append(Field.AVATAR_ID.expression + ", ")
-			.append(Field.BIRTHDAY.expression + ", ")
-			.append(Field.JOINED_DATE.expression + ", ")
-			.append(Field.COMPANY_NAME.expression + ", ")
-			.append(Field.INDUSTRY.expression + ", ")
-			.append(Field.ROLE_NAME.expression + ", ")
-			.append(Field.CAN_CREATE_TASK.expression + ", ")
-			.append(Field.CAN_CREATE_PRODUCT.expression).toString();
 
 }
