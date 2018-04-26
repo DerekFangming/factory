@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.factory.domain.Principal;
 import com.factory.domain.User;
 import com.factory.domain.type.RoleOffsetType;
 import com.factory.exceptions.ErrorType;
@@ -94,6 +93,10 @@ public class UserController {
 					imageManager.updateImageNotNull(avatarId, null, null, null, null, userId);
 				}
 				
+				if (manager.getVerificationNeeded()) {
+					userManager.createUserActivation(userId, manager.getId());
+				}
+				
 				respond.put("activated", !manager.getVerificationNeeded());
 			} else { // Registering a new company
 				String companyName = (String) Utils.notNull(request.get("companyName"));
@@ -145,7 +148,7 @@ public class UserController {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		
 		try {
-			Principal user = null;
+			User user = null;
 			Object usernameObj = request.get("username");
 			
 			if (usernameObj != null) { //Logging in with username and password
@@ -193,6 +196,13 @@ public class UserController {
 			}
 			
 			respond.put("accessToken", user.getAccessToken());
+			respond.put("activated", user.getActivated());
+			respond.put("name", user.getName());
+			respond.put("phone", user.getPhone());
+			respond.put("work_id", user.getWorkId());
+			respond.put("avatar_id", user.getAvatarId());
+			respond.put("birthday", user.getBirthday());
+			respond.put("joined_date", user.getJoinedDate());
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/login", request);
@@ -230,7 +240,5 @@ public class UserController {
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
-	
-	
 
 }

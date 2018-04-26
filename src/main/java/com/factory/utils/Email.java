@@ -1,7 +1,5 @@
 package com.factory.utils;
 
-import java.util.Properties;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -25,12 +23,7 @@ public class Email {
 	}
 	
 	public static void sendEmail(String from, String to, String subject, String content) throws MessagingException{
-		//TODO: Move this to set up code
-		String host = "localhost";
-		Properties properties = System.getProperties();
-		properties.setProperty("mail.smtp.host", host);
-
-		Session session = Session.getDefaultInstance(properties);
+		Session session = Session.getDefaultInstance(System.getProperties());
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(new InternetAddress(from));
 		if (to.indexOf(',') > 0){

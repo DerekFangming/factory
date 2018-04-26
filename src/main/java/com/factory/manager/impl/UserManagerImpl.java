@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.factory.dao.CompanyDao;
+import com.factory.dao.UserActivationDao;
 import com.factory.dao.UserDao;
 import com.factory.dao.UserDetailDao;
 import com.factory.dao.impl.CoreTableType;
@@ -20,8 +21,8 @@ import com.factory.dao.impl.QueryType;
 import com.factory.dao.impl.RelationalOpType;
 import com.factory.dao.impl.TableJoinExpression;
 import com.factory.dao.impl.TableJoinType;
-import com.factory.domain.Principal;
 import com.factory.domain.User;
+import com.factory.domain.UserActivation;
 import com.factory.domain.UserDetail;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InvalidParamException;
@@ -37,6 +38,7 @@ public class UserManagerImpl implements UserManager {
 	
 	@Autowired private UserDao userDao;
 	@Autowired private UserDetailDao userDetailDao;
+	@Autowired private UserActivationDao userActivationDao;
 
 	@Override
 	public int createUser(String username, String password, String accessToken, Boolean remember, String verificationCode,
@@ -95,19 +97,19 @@ public class UserManagerImpl implements UserManager {
 	}
 	
 	@Override
-	public Principal validateAccessToken(Map<String, Object> request) throws InvalidStateException, InvalidParamException {
+	public User validateAccessToken(Map<String, Object> request) throws InvalidStateException, InvalidParamException {
 		return validateAccessToken(request, false);
 	}
 	
 	@Override
-	public Principal validateAccessToken(Map<String, Object> request, boolean loadDetails) throws InvalidStateException, InvalidParamException {
+	public User validateAccessToken(Map<String, Object> request, boolean loadDetails) throws InvalidStateException, InvalidParamException {
 		String accessToken = (String) Utils.notNull(request.get("accessToken"));
 		try{
 			Map<String, Object> result = Token.decodeJWT(accessToken);
 			Instant exp = Instant.parse((String)result.get("expire"));
 			String username = (String) Utils.notNull(request.get("username"));
 			
-			Principal user = null;
+			User user = null;
 			if (loadDetails) {
 				
 			} else {
@@ -206,6 +208,15 @@ public class UserManagerImpl implements UserManager {
 		
 		
 		return userDetailDao.findObject(qb.createQuery());
+	}
+
+	@Override
+	public int createUserActivation(int requesterId, int responderId) {
+		UserActivation userActivation = new UserActivation();
+		userActivation.setRequesterId(requesterId);
+		userActivation.setResponderId(responderId);
+		userActivation.setCreatedAt(Instant.now());
+		return userActivationDao.persist(userActivation);
 	}
 
 }
