@@ -1,13 +1,13 @@
 package com.factory.dao.impl;
 
-public enum ResultsOrderType{
+public enum ResultsOrderType {
 	ASCENDING("ASC"),
 	DESCENDING("DESC"),
 	NONE(null);
 	
 	protected String asString;
 	
-	ResultsOrderType(String keyword){
+	ResultsOrderType(String keyword) {
 		this.asString = " " + keyword + " "; 
 	}
 }

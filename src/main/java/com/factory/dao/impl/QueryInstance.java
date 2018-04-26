@@ -4,17 +4,17 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import com.factory.utils.Pair;
 
-public class QueryInstance extends Pair<String, MapSqlParameterSource>{
+public class QueryInstance extends Pair<String, MapSqlParameterSource> {
 
-	QueryInstance(String f, MapSqlParameterSource s){
+	QueryInstance(String f, MapSqlParameterSource s) {
 		super(f, s);
 	}
 
-	public String getQueryStr(){
+	public String getQueryStr() {
 		return this.getFirst();
 	}
 	
-	public MapSqlParameterSource getParams(){
+	public MapSqlParameterSource getParams() {
 		return this.getSecond();
 	}
 }

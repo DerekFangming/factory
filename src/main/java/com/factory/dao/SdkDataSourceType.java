@@ -3,7 +3,7 @@ package com.factory.dao;
 /**
  * CoreDataSourceType specifies the concrete data sources available through the SDK.	
  */
-public enum SdkDataSourceType implements DataSourceType{
+public enum SdkDataSourceType implements DataSourceType {
 	/**
 	 * Represents the core service database available through the SDK.
 	 */
@@ -25,8 +25,7 @@ public enum SdkDataSourceType implements DataSourceType{
 	 */
 	CONTENT;
 
-	public String getNickname()
-	{
+	public String getNickname() {
 		return this.toString();
 	}
 }

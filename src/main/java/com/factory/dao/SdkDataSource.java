@@ -3,7 +3,7 @@ package com.factory.dao;
 import java.util.List;
 import java.util.Map;
 
-public interface SdkDataSource{ 
+public interface SdkDataSource { 
 	/**
 	 * Returns the database's actual name (as seen, for ex, in PgAdmin).
 	 */
@@ -16,10 +16,6 @@ public interface SdkDataSource{
 	 */
 	String getNickname();
 
-	/**
-	 * @param dst The type of this data source 
-	 */
-//	void setDataSourceType(DataSourceType dst);
 
 	void addTable(SchemaTable table);
 	

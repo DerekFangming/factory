@@ -6,10 +6,9 @@ import com.factory.dao.SchemaTable;
 import com.factory.utils.Pair;
 
 public enum QueryType{
-	//	CREATE TABLE principal_types (id SERIAL NOT NULL, CONSTRAINT principal_types_pkey PRIMARY KEY (id), type TEXT)
 	CREATE_TABLE() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 			String tableName = table.getTableName();
 
@@ -23,7 +22,7 @@ public enum QueryType{
 
 			String primaryKeyName = table.getPrimaryKeyName();
 
-			for (Pair<Enum<?>, String> item : table.getColumnDefns()){
+			for (Pair<Enum<?>, String> item : table.getColumnDefns()) {
 				Enum<?> first = item.getFirst();
 
 				String colName = SchemaTable.getName(first);
@@ -35,7 +34,7 @@ public enum QueryType{
 
 				delim = ", ";
 
-				if (primaryKeyName != null){
+				if (primaryKeyName != null) {
 					querySB.append(delim)
 						.append("CONSTRAINT ")
 						.append(tableName)
@@ -45,7 +44,6 @@ public enum QueryType{
 
 					primaryKeyName = null;
 				}
-
 			}
 
 			querySB.append(")");
@@ -57,7 +55,7 @@ public enum QueryType{
 	// UPDATE access_tokens SET x_user_id = :x_user_id, partner_id = :partner_id WHERE id = :id
 	UPDATE_BY_ID() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 			String tableName = table.getTableName();
 
@@ -83,7 +81,7 @@ public enum QueryType{
 	// INSERT INTO access_tokens (x_user_id, partner_id, expiration, token) VALUES(:x_user_id, :partner_id, :expiration, :token)
 	INSERT() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 			String tableName = table.getTableName();
 
@@ -126,7 +124,7 @@ public enum QueryType{
 	
 	FIND() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 					 
 			StringBuilder querySB = new StringBuilder("SELECT ")
@@ -151,7 +149,7 @@ public enum QueryType{
 
 	FIND_ID() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 
 			StringBuilder querySB = new StringBuilder("SELECT ")
@@ -167,7 +165,7 @@ public enum QueryType{
 	
 	COUNT_ALL() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 			String tableName = table.getTableName();
 
@@ -182,7 +180,7 @@ public enum QueryType{
 	
 	DELETE() {
 		@Override
-		protected StringBuilder finalizeQueryString(QueryBuilder builder){
+		protected StringBuilder finalizeQueryString(QueryBuilder builder) {
 			SchemaTable table = builder.getSchemaTable();
 			String tableName = table.getTableName();
 
@@ -200,16 +198,16 @@ public enum QueryType{
 	QueryType(){
 	}
 		
-	public static QueryBuilder getQueryBuilder(SchemaTable table, QueryType qType){
+	public static QueryBuilder getQueryBuilder(SchemaTable table, QueryType qType) {
 		QueryBuilder qb = new QueryBuilder(table, qType);
 		
 		return qb;
 	}
 	
-	private StringBuilder commonFindAndCountFinalizeQueryString(StringBuilder querySB, QueryBuilder qb){
+	private StringBuilder commonFindAndCountFinalizeQueryString(StringBuilder querySB, QueryBuilder qb) {
 		StringBuilder symbolicExpression = qb.getSymbolicExpression();
 		
-		if(symbolicExpression.length() > 0){
+		if(symbolicExpression.length() > 0) {
 			querySB.append(" WHERE " )
 				.append(symbolicExpression);			
 		}

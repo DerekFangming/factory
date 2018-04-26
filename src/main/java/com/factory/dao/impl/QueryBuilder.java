@@ -12,8 +12,7 @@ import com.factory.dao.SchemaTable;
 import com.factory.exceptions.InternalServerException;
 import com.factory.utils.Pair;
 
-public class QueryBuilder
-{
+public class QueryBuilder {
 	private static String className = QueryBuilder.class.getSimpleName();
 	private static Logger logger = Logger.getLogger(className);
 	
@@ -48,7 +47,7 @@ public class QueryBuilder
 	 * @param table
 	 * @param qType
 	 */
-	protected QueryBuilder(SchemaTable table, QueryType qType){
+	protected QueryBuilder(SchemaTable table, QueryType qType) {
 		this.table = table;
 		this.qType = qType;
 		this.seenFields = new SymbolicFieldNames();
@@ -56,7 +55,7 @@ public class QueryBuilder
 	}
 
 	private QueryBuilder(SchemaTable table, QueryType qType, 
-		SymbolicFieldNames parentSeenFields, MapSqlParameterSource params){
+		SymbolicFieldNames parentSeenFields, MapSqlParameterSource params) {
 		this.table = table;
 		this.qType = qType;
 		this.seenFields = parentSeenFields;
@@ -77,11 +76,11 @@ public class QueryBuilder
 	 * @param qType Query type
 	 * @return 
 	 */
-	public QueryBuilder getInnerQueryBuilder(SchemaTable table, QueryType qType){
+	public QueryBuilder getInnerQueryBuilder(SchemaTable table, QueryType qType) {
 		return new QueryBuilder(table, qType, this.seenFields, this.params); 
 	}
 	
-	protected SchemaTable getSchemaTable(){
+	protected SchemaTable getSchemaTable() {
 		return this.table;
 	}
 
@@ -91,13 +90,13 @@ public class QueryBuilder
 	 * 
 	 * @param fieldName
 	 */
-	public QueryBuilder setReturnField(String fieldName){
+	public QueryBuilder setReturnField(String fieldName) {
 		this.returnField = fieldName;
 
 		return this;
 	}
 	
-	public QueryBuilder setReturnField(List<Pair<Enum<?>, String>> fieldTypes){
+	public QueryBuilder setReturnField(List<Pair<Enum<?>, String>> fieldTypes) {
 		this.returnField = "";
 		
 		for (Pair<Enum<?>, String> p : fieldTypes) {
@@ -116,7 +115,7 @@ public class QueryBuilder
 		return this;
 	}
 	
-	public String getReturnField(){
+	public String getReturnField() {
 		return this.returnField;
 	}
 	
@@ -138,7 +137,7 @@ public class QueryBuilder
 		
 		QueryExpression qe;
 		
-		if(expressionList.isEmpty()){
+		if(expressionList.isEmpty()) {
 			qe = new QueryExpression(term);
 		}else{
 			qe = new QueryExpression(beforeOp, term);
@@ -157,7 +156,7 @@ public class QueryBuilder
 	 * <br/>
 	 * Or: <tt>&lt;term1&gt; OR &lt;term2&gt; OR &lt;term3&gt;</tt>
 	 */
-	public QueryBuilder addQueryExpression(List<QueryTerm> terms, LogicalOpType joinOp){
+	public QueryBuilder addQueryExpression(List<QueryTerm> terms, LogicalOpType joinOp) {
 		return addQueryExpression(LogicalOpType.AND, terms, joinOp);
 	}
 
@@ -167,14 +166,14 @@ public class QueryBuilder
 	 * @param terms List of query terms
 	 * @param joinOp	Logical operator used to join each individual query term.
 	 */
-	public QueryBuilder addQueryExpression(LogicalOpType beforeOp, List<QueryTerm> terms, LogicalOpType joinOp){
+	public QueryBuilder addQueryExpression(LogicalOpType beforeOp, List<QueryTerm> terms, LogicalOpType joinOp) {
 		terms = this.seenFields.processQueryTerms(terms);
 		
 		QueryExpression qe;
 		
-		if(expressionList.isEmpty()){
+		if(expressionList.isEmpty()) {
 			qe = new QueryExpression(terms, joinOp);
-		}else{
+		} else {
 			qe = new QueryExpression(beforeOp, terms, joinOp);
 		}
 		
@@ -197,15 +196,15 @@ public class QueryBuilder
 	}
 
 	// Nesting the calls so it is clear from what the StringBuilder is derived.
-	protected StringBuilder getFieldNamesAsCSV(){
+	protected StringBuilder getFieldNamesAsCSV() {
 		return this.getFieldNamesAsCSV(this.nvpList);
 	}
 	
 	// Ex: (x_user_id, partner_id, expiration, token)
-	protected StringBuilder getFieldNamesAsCSV(List<NVPair> nvps){
+	protected StringBuilder getFieldNamesAsCSV(List<NVPair> nvps) {
 		StringBuilder sb = new StringBuilder();
 		
-		if(nvps.isEmpty()){
+		if(nvps.isEmpty()) {
 			return sb;
 		}
 		
@@ -215,7 +214,7 @@ public class QueryBuilder
 		// We'll add the delim _before_ the current item - and start with an empty delim string. :-)
 		String delim = "";
 
-		for(NVPair nvp : nvps){
+		for(NVPair nvp : nvps) {
 			sb.append(delim).append(nvp.getField());
 
 			delim = ", ";
@@ -227,15 +226,15 @@ public class QueryBuilder
 	}
 	
 	// Nesting the calls so it is clear from what the StringBuilder is derived.
-	protected StringBuilder getSymbolicNamesAsCSV(){
+	protected StringBuilder getSymbolicNamesAsCSV() {
 		return this.getSymbolicNamesAsCSV(this.nvpList);		
 	}
 	
 	//	Ex: ():x_user_id, :partner_id, :expiration, :token)
-	protected StringBuilder getSymbolicNamesAsCSV(List<NVPair> nvps){
+	protected StringBuilder getSymbolicNamesAsCSV(List<NVPair> nvps) {
 		StringBuilder sb = new StringBuilder();
 		
-		if(nvps.isEmpty()){
+		if(nvps.isEmpty()) {
 			return sb;
 		}
 		
@@ -245,7 +244,7 @@ public class QueryBuilder
 		// We'll add the delim _before_ the current item - and start with an empty delim string. :-)
 		String delim = "";
 
-		for(NVPair nvp : nvps){
+		for(NVPair nvp : nvps) {
 			sb.append(delim)
 			.append(":")
 			.append(nvp.getSymbolicName());
@@ -259,15 +258,15 @@ public class QueryBuilder
 	}
 	
 	// Nesting the calls so it is clear from what the StringBuilder is derived.
-	protected StringBuilder getFieldNameSymbolicNamePairsAsCSV(){
+	protected StringBuilder getFieldNameSymbolicNamePairsAsCSV() {
 		return this.getFieldNameSymbolicNamePairsAsCSV(this.nvpList);
 	}
 	
 	// Ex: (x_user_id = :x_user_id, partner_id = :partner_id)
-	protected StringBuilder getFieldNameSymbolicNamePairsAsCSV(List<NVPair> nvps){
+	protected StringBuilder getFieldNameSymbolicNamePairsAsCSV(List<NVPair> nvps) {
 		StringBuilder sb = new StringBuilder();
 		
-		if(nvps.isEmpty()){
+		if(nvps.isEmpty()) {
 			return sb;
 		}
 
@@ -275,7 +274,7 @@ public class QueryBuilder
 		// We'll add the delim _before_ the current item - and start with an empty delim string. :-)
 		String delim = "";
 
-		for(NVPair nvp : nvps){
+		for(NVPair nvp : nvps) {
 			sb.append(delim)
 			.append(nvp.getField())
 			.append(" = :")
@@ -289,15 +288,15 @@ public class QueryBuilder
 
 	
 	// Nesting the calls so it is clear from what the StringBuilder is derived.
-	protected StringBuilder getSymbolicExpression(){
+	protected StringBuilder getSymbolicExpression() {
 		return this.getSymbolicExpression(this.expressionList);
 	}
 	
 	// Ex: 
-	protected StringBuilder getSymbolicExpression(List<QueryExpression> expressions){
+	protected StringBuilder getSymbolicExpression(List<QueryExpression> expressions) {
 		StringBuilder sb = new StringBuilder();
 		
-		if(expressions.isEmpty()){
+		if(expressions.isEmpty()) {
 			return sb;
 		}
 		
@@ -307,29 +306,29 @@ public class QueryBuilder
 		List<QueryTerm> terms;
 		LogicalOpType joinOp;
 		
-		for(QueryExpression qx : expressions){
+		for(QueryExpression qx : expressions) {
 			beforeOp = qx.getBeforeOp();
 			terms = qx.getTerms();
 			joinOp = qx.getJoinOp();
 			
-			if(beforeOp != null){
+			if(beforeOp != null) {
 				sb.append(beforeOp.asString)
 				.append("(");
 			}
 			
 			String delim = "";
 		 
-			for(QueryTerm term : terms){
+			for(QueryTerm term : terms) {
 				sb.append(delim)
 				.append(term.getOp().makeSymbolicTerm(term));
 
 				// Not 
-				if(joinOp != null){
+				if(joinOp != null) {
 					delim = joinOp.asString;
 				}
 			}
 			
-			if(beforeOp != null){
+			if(beforeOp != null) {
 				sb.append(")");
 			}
 		}
@@ -339,27 +338,27 @@ public class QueryBuilder
 		return sb;
 	}
 	
-	public void setParamsSource(MapSqlParameterSource params){
+	public void setParamsSource(MapSqlParameterSource params) {
 		this.params = params;
 	}
 	
 	// Nesting the calls so it is clear from what the List is derived.
-	private List<NVPair> getNVPairsFromExpressions(){
+	private List<NVPair> getNVPairsFromExpressions() {
 		return this.getNVPairsFromExpressions(this.expressionList);
 	}
 	
-	private List<NVPair> getNVPairsFromExpressions(List<QueryExpression> expressions){
+	private List<NVPair> getNVPairsFromExpressions(List<QueryExpression> expressions) {
 		List<NVPair> result = new ArrayList<NVPair>();
 		
 		List<QueryTerm> terms;
 		
 		NVPair nvp;
 		
-		for(QueryExpression qx : expressions){
+		for(QueryExpression qx : expressions) {
 			terms = qx.getTerms();
 			
-			for(QueryTerm term : terms){
-				if(term.getOp() == RelationalOpType.IN || term.getOp() == RelationalOpType.SPE){
+			for(QueryTerm term : terms) {
+				if(term.getOp() == RelationalOpType.IN || term.getOp() == RelationalOpType.SPE) {
 					continue;
 				}
 				
@@ -374,60 +373,60 @@ public class QueryBuilder
 		return result;
 	}
 	
-	protected MapSqlParameterSource addToParams(List<NVPair> nvps){
-		for(NVPair nvp : nvps){
+	protected MapSqlParameterSource addToParams(List<NVPair> nvps) {
+		for(NVPair nvp : nvps) {
 			params.addValue(nvp.getSymbolicName(), nvp.getValue());
 		}
 
 		return params;
 	}
 		
-	public void addNameValuePair(NVPair nvp){
+	public void addNameValuePair(NVPair nvp) {
 		nvp = this.seenFields.process(nvp);
 		
 		this.nvpList.add(nvp);
 	}
 
-	public void addNameValuePairs(List<NVPair> nvps){
+	public void addNameValuePairs(List<NVPair> nvps) {
 		nvps = this.seenFields.processNVPairs(nvps);
 		
 		this.nvpList.addAll(nvps);
 	}
 	
-	public QueryBuilder setLimit(int limit){
+	public QueryBuilder setLimit(int limit) {
 		this.limit = limit;
 		
 		return this;
 	}
 	
-	public QueryBuilder setOffset(int offset){
+	public QueryBuilder setOffset(int offset) {
 		this.offset = offset;
 		
 		return this;
 	}
 	
-	public QueryBuilder setOrdering(String orderingField, ResultsOrderType orderType){
+	public QueryBuilder setOrdering(String orderingField, ResultsOrderType orderType) {
 		this.ordering = orderType;
 		this.orderingField = orderingField;
 		
 		return this;
 	}
 		
-	public QueryInstance createQuery(){		
+	public QueryInstance createQuery() {		
 		StringBuilder querySB = qType.finalizeQueryString(this);
 
-		if(this.ordering != ResultsOrderType.NONE){
+		if(this.ordering != ResultsOrderType.NONE) {
 			querySB.append(" ORDER BY ")
 			.append(this.orderingField)
 			.append(this.ordering.asString);
 		}
 		
-		if(this.limit > 0){
+		if(this.limit > 0) {
 			querySB.append(" LIMIT ")
 			.append(this.limit);
 		}
 		
-		if(this.offset > 0){
+		if(this.offset > 0) {
 			querySB.append(" OFFSET ")
 			.append(this.offset);
 		}
@@ -451,7 +450,7 @@ public class QueryBuilder
 	
 	// Mostly for use in Eclipse debugging
 	@Override
-	public String toString(){
+	public String toString() {
 		// Pretty it up for display
 		return this.qType.finalizeQueryString(this).toString();
 	}

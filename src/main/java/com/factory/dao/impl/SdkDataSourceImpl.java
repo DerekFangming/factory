@@ -12,7 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.factory.dao.SchemaTable;
 import com.factory.dao.SdkDataSource;
 
-public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDataSource{
+public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDataSource {
 	private String dbNnickname;
 	private String dbName;
 	private String serverName;
@@ -25,12 +25,12 @@ public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDat
 	// to some other table).
 	private Map<String,SchemaTable> tables = new LinkedHashMap<String,SchemaTable>();
 	
-	public SdkDataSourceImpl(){
+	public SdkDataSourceImpl() {
 		super();
 	}
 	
 	@PostConstruct
-	public void init(){
+	public void init() {
 		String url = this.getUrl();
 		int lastSlashPos = url.lastIndexOf('/');
 		
@@ -41,12 +41,12 @@ public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDat
 
 	// nickname param comes from our spring config (xml) file.
 	@Autowired
-	public void setDbNickname(String dbNickname){
+	public void setDbNickname(String dbNickname) {
 		this.dbNnickname = dbNickname;
 	}
 	
 	@Override
-	public String getNickname( ){
+	public String getNickname() {
 		return this.dbNnickname;
 	}
 	
@@ -54,18 +54,18 @@ public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDat
 	/**
 	 * Returns the database's actual name (as seen, for ex, in PgAdmin).
 	 */
-	public String getDbName(){
+	public String getDbName() {
 		return this.dbName;
 	}
 	
-	public String getServerName(){
+	public String getServerName() {
 		return this.serverName;
 	}
 
 //	/**
 //	 * @return the data source type
 //	 */
-//	public DataSourceType getDataSourceType( ){
+//	public DataSourceType getDataSourceType(){
 //		return dst;
 //	}
 //
@@ -76,33 +76,33 @@ public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDat
 //		this.dst = dst;
 //	}
 
-	public void addTable(SchemaTable table){
+	public void addTable(SchemaTable table) {
 		tables.put(table.getTableName(), table);
 	}
 	
-	public SchemaTable getTable(String tableName){
+	public SchemaTable getTable(String tableName) {
 		return tables.get(tableName);
 	}
 	
-	public List<String> getTableNames(){
+	public List<String> getTableNames() {
 		return new ArrayList<String>(tables.keySet());
 	}
 	
-	public List<SchemaTable> getSchemaTables(){
+	public List<SchemaTable> getSchemaTables() {
 		return new ArrayList<SchemaTable>(tables.values());
 	}
 	
-	public Map<String,SchemaTable> getTables(){
+	public Map<String,SchemaTable> getTables() {
 		return this.tables;
 	}
 
 	@Override
-	public String toString(){
+	public String toString() {
 		return this.toString(false);
 	}
 	
 	@Override
-	public String toString(boolean verbose){
+	public String toString(boolean verbose) {
 		/*
 		StringBuilder sb = new StringBuilder(Util.NL);
 		sb = ToStringHelper.variableToString(sb, ToStringHelper.INDENT_NO, "dbNickname", this.dbNnickname);

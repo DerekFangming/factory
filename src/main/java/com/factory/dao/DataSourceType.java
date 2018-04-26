@@ -1,5 +1,5 @@
 package com.factory.dao;
 
-public interface DataSourceType{
+public interface DataSourceType {
 	String getNickname();
 }

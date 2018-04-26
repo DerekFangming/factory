@@ -51,7 +51,7 @@ public class QueryExpression {
 		return joinOp;
 	}
 
-	private static List<QueryTerm> toTermsList(QueryTerm term){
+	private static List<QueryTerm> toTermsList(QueryTerm term) {
 		List<QueryTerm> list = new ArrayList<QueryTerm>(1);
 		list.add(term);
 		
