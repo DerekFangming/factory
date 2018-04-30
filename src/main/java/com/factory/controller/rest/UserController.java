@@ -199,10 +199,12 @@ public class UserController {
 			respond.put("activated", user.getActivated());
 			respond.put("name", user.getName());
 			respond.put("phone", user.getPhone());
-			respond.put("work_id", user.getWorkId());
-			respond.put("avatar_id", user.getAvatarId());
-			respond.put("birthday", user.getBirthday());
-			respond.put("joined_date", user.getJoinedDate());
+			respond.put("workId", user.getWorkId());
+			respond.put("avatarId", user.getAvatarId());
+			if (user.getBirthday() != null)
+				respond.put("birthday", user.getBirthday().toString());
+			if (user.getJoinedDate() != null)
+				respond.put("joinedDate", user.getJoinedDate().toString());
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/login", request);
