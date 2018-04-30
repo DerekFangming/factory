@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.factory.dao.RoleDao;
+import com.factory.dao.impl.CoreTableType;
+import com.factory.dao.impl.QueryBuilder;
 import com.factory.dao.impl.QueryTerm;
+import com.factory.dao.impl.QueryType;
+import com.factory.dao.impl.RelationalOpType;
+import com.factory.dao.impl.ResultsOrderType;
 import com.factory.domain.Role;
 import com.factory.domain.type.RoleOffsetType;
 import com.factory.exceptions.ErrorType;
@@ -59,6 +64,17 @@ public class RoleManagerImpl implements RoleManager{
 		} catch(NotFoundException e){
 			throw new NotFoundException(ErrorType.ROLE_NOT_FOUND);
 		}
+	}
+	
+	@Override
+	public List<Role> getAllRoles(int companyId, int offset, int limit) throws NotFoundException {
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.ROLES, QueryType.FIND)
+				.addQueryExpression(new QueryTerm(RoleDao.Field.COMPANY_ID.name, RelationalOpType.EQ, companyId))
+				.setOrdering(RoleDao.Field.LEVEL.name, ResultsOrderType.ASCENDING)
+				.setOffset(offset)
+				.setLimit(limit);
+		
+		return roleDao.findAllObjects(qb.createQuery());
 	}
 
 }

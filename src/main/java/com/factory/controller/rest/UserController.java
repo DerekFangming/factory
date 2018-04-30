@@ -2,7 +2,9 @@ package com.factory.controller.rest;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.factory.domain.User;
+import com.factory.domain.UserDetail;
 import com.factory.domain.type.RoleOffsetType;
 import com.factory.exceptions.ErrorType;
 import com.factory.exceptions.InternalServerException;
@@ -201,10 +204,8 @@ public class UserController {
 			respond.put("phone", user.getPhone());
 			respond.put("workId", user.getWorkId());
 			respond.put("avatarId", user.getAvatarId());
-			if (user.getBirthday() != null)
-				respond.put("birthday", user.getBirthday().toString());
-			if (user.getJoinedDate() != null)
-				respond.put("joinedDate", user.getJoinedDate().toString());
+			respond.put("birthday", Utils.instantToString(user.getBirthday()));
+			respond.put("joinedDate", Utils.instantToString(user.getJoinedDate()));
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/login", request);
@@ -238,6 +239,42 @@ public class UserController {
 			} catch (NotFoundException ignored) {}
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/check_username", request);
+		}
+		
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/get_all_users", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> getAllUsers(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try {
+			int offset = (int) Utils.notNull(request.get("offset"));
+			int limit = (int) Utils.notNull(request.get("limit"));
+			
+			User user = userManager.validateAccessToken(request);
+			
+			List<UserDetail> userDetailList = userManager.getAllUserDetails(user.getCompanyId(), offset, limit);
+			List<Map<String, Object>> processedList = new ArrayList<>();
+			for (UserDetail u : userDetailList) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("confirmed", u.getId());
+				map.put("activated", u.getId());
+				map.put("name", u.getName());
+				map.put("phone", u.getPhone());
+				map.put("workId", u.getWorkId());
+				map.put("avatarId", u.getAvatarId());
+				map.put("birthday", Utils.instantToString(u.getBirthday()));
+				map.put("joinedDate", Utils.instantToString(u.getJoinedDate()));
+				map.put("roleName", u.getRoleName());
+				
+				processedList.add(map);
+			}
+			
+			respond.put("userList", processedList);
+			
+		} catch (Exception e) {
+			respond = errorManager.createRespondFromException(e, "/get_all_users", request);
 		}
 		
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);

@@ -19,6 +19,7 @@ import com.factory.dao.impl.QueryBuilder;
 import com.factory.dao.impl.QueryTerm;
 import com.factory.dao.impl.QueryType;
 import com.factory.dao.impl.RelationalOpType;
+import com.factory.dao.impl.ResultsOrderType;
 import com.factory.dao.impl.TableJoinExpression;
 import com.factory.dao.impl.TableJoinType;
 import com.factory.domain.User;
@@ -217,6 +218,20 @@ public class UserManagerImpl implements UserManager {
 		userActivation.setResponderId(responderId);
 		userActivation.setCreatedAt(Instant.now());
 		return userActivationDao.persist(userActivation);
+	}
+	
+	@Override
+	public List<UserDetail> getAllUserDetails(int companyId, int offset, int limit) throws NotFoundException {
+		//TODO: Fix this query
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USER_DETAILS, QueryType.FIND)
+				.addTableJoinExpression(new TableJoinExpression(CoreTableType.USERS, UserDao.Field.ROLE_ID.name,
+						TableJoinType.LEFT_JOIN, CoreTableType.ROLES, CompanyDao.Field.ID.name))
+				.addQueryExpression(new QueryTerm("users.company_id", RelationalOpType.EQ, companyId))
+				.setReturnField("users.id, password, access_token, remember, confirmed, salt, activated, users.name, phone, work_id, avatar_id, birthday, joined_date, '' as company_name, '' as industry, roles.name as role_name, can_create_task, can_create_product")
+				.setOrdering(UserDetailDao.Field.NAME.name, ResultsOrderType.ASCENDING)
+				.setOffset(offset)
+				.setLimit(limit);
+		return userDetailDao.findAllObjects(qb.createQuery());
 	}
 
 }

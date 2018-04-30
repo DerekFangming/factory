@@ -3,9 +3,12 @@ package com.factory.manager;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -20,7 +23,17 @@ public class RoleManagerTests {
 	@Autowired private RoleManager roleManager;
 	
 	@Test
-	public void testGetRole() {
+	public void testCreateRole() {
+		try {
+			roleManager.createRole(0, "", 1, 0, false, false);
+			fail();
+		} catch (Exception e) {
+			assertEquals(e.getClass(), DataIntegrityViolationException.class);
+		}
+	}
+	
+	@Test
+	public void testGetRoleById() {
 		Role role = roleManager.getRoleById(1);
 		
 		assertEquals(role.getLevel().intValue(), 0);
@@ -41,6 +54,19 @@ public class RoleManagerTests {
 		} catch (NotFoundException e) {
 			fail();
 		}
+	}
+	
+	@Test
+	public void testGetAllRoles() {
+		try {
+			roleManager.getAllRoles(1, 1000000, 1);
+			fail();
+		} catch (Exception e) {
+			assertEquals(e.getClass(), NotFoundException.class);
+		}
+		
+		List<Role> roleList = roleManager.getAllRoles(1, 0, 1);
+		assertEquals(roleList.size(), 1);
 	}
 
 }
