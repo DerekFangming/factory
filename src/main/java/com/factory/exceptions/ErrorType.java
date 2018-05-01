@@ -15,6 +15,7 @@ public enum ErrorType {
 	INVALID_ACCESS_TOKEN(204, "The access token you are using is not valid. Please login again."),
 	SESSION_EXPIRED(205, "Your login session has expired. Please log in again."),
 	USERNAME_OR_PASSWORD_INCORRECT(206, "Username and password combination is invalid. Please try again."),
+	USER_NOT_ACTIVITED(207, "Your account is not activated. Please contact your manager to have it activited."),
 	//Role
 	ROLE_NOT_FOUND(300, "The role does not exist."),
 	//Company

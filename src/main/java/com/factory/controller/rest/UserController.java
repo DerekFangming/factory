@@ -138,7 +138,11 @@ public class UserController {
 				errorManager.logError(e, "/register", request);
 			}
 			
-			respond.put("accessToken", accessToken);
+			if ((boolean) respond.get("activated")) {
+				respond.put("accessToken", accessToken);
+			} else {
+				throw new InvalidStateException(ErrorType.USER_NOT_ACTIVITED);
+			}
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/register", request);
@@ -198,14 +202,17 @@ public class UserController {
 				user = userManager.validateAccessToken(request);
 			}
 			
-			respond.put("accessToken", user.getAccessToken());
-			respond.put("activated", user.getActivated());
-			respond.put("name", user.getName());
-			respond.put("phone", user.getPhone());
-			respond.put("workId", user.getWorkId());
-			respond.put("avatarId", user.getAvatarId());
-			respond.put("birthday", Utils.instantToString(user.getBirthday()));
-			respond.put("joinedDate", Utils.instantToString(user.getJoinedDate()));
+			if (user.getActivated()) {
+				respond.put("accessToken", user.getAccessToken());
+				respond.put("name", user.getName());
+				respond.put("phone", user.getPhone());
+				respond.put("workId", user.getWorkId());
+				respond.put("avatarId", user.getAvatarId());
+				respond.put("birthday", Utils.instantToString(user.getBirthday()));
+				respond.put("joinedDate", Utils.instantToString(user.getJoinedDate()));
+			} else {
+				throw new InvalidStateException(ErrorType.USER_NOT_ACTIVITED);
+			}
 			
 		} catch (Exception e) {
 			respond = errorManager.createRespondFromException(e, "/login", request);
@@ -258,8 +265,8 @@ public class UserController {
 			for (UserDetail u : userDetailList) {
 				Map<String, Object> map = new HashMap<>();
 				map.put("id", u.getId());
-				map.put("confirmed", u.getId());
-				map.put("activated", u.getId());
+				map.put("confirmed", u.getConfirmed());
+				map.put("activated", u.getActivated());
 				map.put("name", u.getName());
 				map.put("phone", u.getPhone());
 				map.put("workId", u.getWorkId());

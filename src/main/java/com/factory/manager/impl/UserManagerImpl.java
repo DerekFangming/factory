@@ -108,7 +108,7 @@ public class UserManagerImpl implements UserManager {
 		try{
 			Map<String, Object> result = Token.decodeJWT(accessToken);
 			Instant exp = Instant.parse((String)result.get("expire"));
-			String username = (String) Utils.notNull(request.get("username"));
+			String username = (String) result.get("username");
 			
 			User user = null;
 			if (loadDetails) {
